@@ -1,0 +1,284 @@
+const mongoose = require('mongoose');
+const express = require('express');
+const parser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const crypto = require('crypto');
+const port = 3000;
+const multer = require('multer');
+
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, './public_html/images');
+  },
+  filename: (req, file, cb) => {
+      cb(null, file.originalname);
+  }
+})
+
+const upload = multer({storage});
+
+
+// DB stuff
+const db  = mongoose.connection;
+const mongoDBURL = 'mongodb://127.0.0.1/letBroCook';
+mongoose.connect(mongoDBURL, { useNewUrlParser: true });
+db.on('error', () => { 
+  console.log('MongoDB connection error:');
+});
+
+var Schema = mongoose.Schema;
+
+// schema for comments
+var CommentSchema = new Schema({
+  date: Date,
+  text: String,
+});
+
+var Comment = mongoose.model('Comment', CommentSchema);
+
+// schema for recipes
+var RecipeSchema = new Schema({
+  //date: Date, commenting this out for now to make what I'm currently working on easier
+  title: String,
+  image: String,
+  ingredients: [{'regular' : String, 'substitute' : String}],
+  // same here
+  //comments: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+  protein: Number,
+  carbs: Number,
+  fat: Number,
+  instructions: String
+});
+
+var Recipe = mongoose.model('Recipe', RecipeSchema);
+
+// schema for forum posts
+var PostSchema = new Schema({
+  date: Date,
+  title: String,
+  text: String,
+  comments: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+});
+
+var ForumPost = mongoose.model('ForumPost', PostSchema);
+
+// user schema
+var UserSchema = new Schema({
+  username: String,
+  hash: String,
+  salt: String,
+  recipes: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Recipe' }],
+  forums: [{ type : mongoose.Schema.Types.ObjectId, ref: 'ForumPost' }],
+  comments: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+});
+var User = mongoose.model('User', UserSchema);
+
+let sessions = {};
+
+/*
+ * This function adds the new user's session to the object that tracks
+ * all of the current user sessions.
+ */
+function addSession(username) {
+  let sid = Math.floor(Math.random() * 100000000000);
+  let now = Date.now();
+  sessions[username] = {id : sid, time : now};
+  return sid;
+}
+
+/*
+ * This function removes all the expired sessions from the sessions 
+ * tracker so those users are no longer logged in.
+ */ 
+function removeSession() {
+  let sessLength = 120000;    // session length is 2 minutes for now, for testing
+  let now = Date.now();
+  let usernames = Object.keys(sessions);
+  for(let i = 0; i < usernames.length; i++) {
+    let last = sessions[usernames[i]].time;
+    if(last + sessLength < now) {
+      delete sessions[usernames[i]];
+    }
+  }
+}
+
+// check for expired sessions every 2 seconds
+setInterval(removeSession, 2000);
+
+const app = express();
+
+// use cookie parser and JSON parser
+app.use(cookieParser()); 
+app.use(parser.json());
+app.use(parser.urlencoded({ extended: true, limit: '10mb' }));
+
+/*
+ * This function authenticates users trying to access the user-only pages of 
+ * the application. If the user has access (which the website can tell via
+ * the cookies from the user), then it will allow the users to access the
+ * page. If the user does not have access, they will be redirected to the
+ * login screen.
+ */
+function authenticate(req, res, next) {
+  let c = req.cookies;
+  if(c != undefined && c.login != undefined) {
+    if(sessions[c.login.username] != undefined) {
+      if(sessions[c.login.username].id == c.login.sessionID) {
+        next(); // might need to change
+      }
+      else {
+        res.redirect('/index.html');  // might change this depending
+      }
+    }
+    else {
+      res.redirect('/index.html');
+    }
+  }
+  else {
+      res.redirect('/index.html');
+  }
+}
+
+/*
+ * This function generates a 4-digit salt to add onto the end of a user's
+ * password.
+ */
+function makeSalt() {
+  let num1 = "" + (Math.random() * 10);
+  let num2 = "" + (Math.random() * 10);
+  let num3 = "" + (Math.random() * 10);
+  let num4 = "" + (Math.random() * 10);
+  let totalSalt = num1 + num2 + num3 + num4;
+  return totalSalt;
+}
+
+/*
+ * This function turns passwords (and salts) into the hashed versions
+ * of themselves for storage and comparison to the stored password.
+ */
+function createHashes(currSalt, text) {
+  let toHash = text + currSalt;
+  let hasher = crypto.createHash('sha3-256');
+  let data = hasher.update(toHash, 'utf-8');
+  let hexVals = data.digest('hex');
+  return hexVals;
+}
+
+app.use(express.static('public_html'));
+
+app.listen(port, () => 
+  console.log(`App listening at http://localhost:${port}`));
+
+
+// should be changed to add/recipe/:USERNAME but currently testing
+app.post('/add/recipe', upload.single('photo'), (req, res) => {
+
+  // get the username from the request parameters
+  console.log('a')
+  console.log(typeof(req.body.ingredients))
+  console.log(req.body.ingredients)
+  let recipe = {
+    title: req.body.title,
+    image: req.file.originalname,
+    ingredients: JSON.parse(req.body.ingredients),
+    instructions: req.body.instructions,
+    protein: req.body.protein,
+    carbs: req.body.carbs,
+    fat: req.body.fat,
+  }
+  console.log(recipe)
+  // create a new item object and save it to the database
+  const newRecipe = new Recipe(recipe);
+  console.log('b')
+  newRecipe.save().then(() => {
+    console.log('new recipe saved');
+  }).catch((error) => { console.log('could not save new recipe', error) })
+
+  // add the new item to the user's listings array
+  /*let p = User.findOne({ username: username }).exec()
+  p.then((user) => {
+    user.listings.push(newItem.id)
+    user.save().then(() => { console.log('update of listings made') })
+      .catch((error) => { console.log('failed to update listing', error) })
+  })
+    .catch((error) => { console.log('could not add item to user listing', error) })*/
+})
+
+app.get('/search/recipes/:KEYWORD', (req, res) => {
+  // get the search keyword from the request parameters
+  const keyword = req.params.KEYWORD;
+  const p = Recipe.find({}).exec();
+  p.then((recipes) => {
+    const neededRecipes = [];
+    for (let recipe of recipes) {
+      // filter users whose username contains the given keyword
+      if (recipe.title.includes(keyword)) {
+        neededRecipes.push(recipe);
+      }
+    }
+    // return the matching items
+    res.end(JSON.stringify(neededRecipes));
+  })
+    .catch((error) => {
+      console.log('error getting items from db', error)
+    })
+})
+
+// path for creating account
+app.post('/add/user', (req, res) => {
+  let userData = req.body;
+  let name = userData.username;
+  let pass = userData.password;
+  let result = User.find({username : name}).exec();
+  result.then((found) => {
+    if(found.length == 0) {
+      // user can be created, they don't already exist
+      let newSalt = makeSalt();
+      let newHash = createHashes(newSalt, pass);
+      let use = new User({
+        username: name,
+        hash: newHash,
+        salt: newSalt,
+        recipes: [],
+        forums: [],
+        comments: [],
+      });
+      let wasSaved = use.save();
+      wasSaved.then(() => {
+        res.end('USER CREATED');
+      }).catch(() => {
+        res.end('FAILED TO SAVE DUE TO DATABASE ISSUE');
+      });
+    }
+    else {
+      res.end('USERNAME ALREADY TAKEN');
+    }
+  });
+});
+
+// path for logging in
+app.post('/login/user', (req, res) => {
+  let userData = req.body;
+  let searched = User.find({username: userData.username}).exec();
+  searched.then((results) => {
+    if(results.length == 0) {
+      res.end('ACCOUNT DOES NOT EXIST');
+    }
+    else {
+      let currUser = results[0];
+      let check = createHashes(currUser.salt, userData.pass);
+      if(check == currUser.hash) {
+        let sid = addSession(userData.username);
+        res.cookie("login", 
+          {username: userData.username, sessionID: sid}, 
+          {maxAge: 60000 * 2 });  // can change max age if needed
+        res.end('SUCCESS');
+      }
+      else {
+        res.end('INCORRECT PASSWORD');
+      }
+    }
+  });
+});

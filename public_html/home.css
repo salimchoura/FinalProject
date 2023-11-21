@@ -1,0 +1,23 @@
+body{
+    margin-top: 20%;
+    background-color:whitesmoke;
+    color: orangered;
+    text-align: center;
+
+}
+
+h2{
+    font-size: 60px;
+}
+
+img
+{
+    width: 100px;
+    height: 100px;
+}
+
+#icon
+{
+    width: 20px;
+    height: 20px;
+}

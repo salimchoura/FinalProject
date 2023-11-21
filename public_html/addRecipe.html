@@ -1,0 +1,62 @@
+<!--
+  Name: Salim Choura and Yanxihao Chen
+  Course Name: CSc337
+  Description: html file for the ostaa project.
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>ReciPost</title>
+    <link rel="stylesheet" href="./addRecipe.css">
+  </head>
+  <body>
+
+    <h1>Recipe Post</h1>
+    <h2>Add a Recipe</h2>
+    <div>
+      <label>Title</label>
+      <img id='avocado' src="./images/avocado.png">
+      <input type="text" id="title">
+    </div><br>
+    <div>
+      <label>Grams of protein</label>
+      <input type="number" id="protein">
+    </div><br>
+    <div>
+        <label>Grams of carbs</label>
+        <input type="number" id="carbs">
+    </div><br>
+    <div>
+        <label>Grams of fat</label>
+        <input type="number" id="fat">
+    </div><br>
+
+    <div>
+      <label>Instructions</label>
+      <textarea id="ins" rows="8" cols="30"></textarea>
+    </div><br>
+    <br><br><br><br><br><br>
+    <label>Add Image</label>
+    <input id='image' type="file" name="photo" accept="image/*" required>
+
+    <br><br><br>
+    <div id="ingredients">
+    <div>
+        <label>Ingredient</label>
+        <input type="text">
+        <label>Substitute</label>
+        <input type="text">
+    </div><br>
+    </div>
+
+    <button id="addSpace"><img src="plus.png" width="10px" height="10px"> Add Ingredient</button>
+
+    <br>
+    <br>
+
+    <button id="post">Create Post</button>
+
+    <script src="./addRecipe.js"></script>
+  </body>
+</html>

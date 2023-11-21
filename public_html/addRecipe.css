@@ -1,0 +1,56 @@
+/**
+    Author: Salim Choura and Yanxiao Chen
+    Course: csc 337
+    Description: This file is a style file for our post.html
+*/
+
+body{
+    background-color:whitesmoke;
+    color: orangered;
+}
+
+h1
+{
+    margin-top: 50px;
+    margin-left: 30px;
+}
+
+h2
+{
+    margin-left: 30px;
+}
+
+label
+{
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+#title, #ins, #protein, #carbs, #fat{
+    display:fixed;
+    float: right;
+    margin-right: 600px;
+}
+
+#post{
+    margin-left: 30px;
+}
+
+button
+{
+    margin-left: 400px;
+}
+
+#avocado
+{
+    z-index: -20;
+    position: absolute;
+    margin-top: -20px;
+    margin-left: 130px;
+    width: 200px;
+}
+
+textarea
+{
+    margin-left: 200px;
+}
