@@ -95,11 +95,11 @@ legend.append("text")
     .style("text-anchor", "start")
     .text((d, i) => data[i] + 'g of ' + labels[i]);
 
-document.getElementById('recipeBlock').innerHTML += "<button id=0><img class='stars' src='star.png'></button>"
-document.getElementById('recipeBlock').innerHTML += "<button id=0><img class='stars' src='star.png'></button>"
-document.getElementById('recipeBlock').innerHTML += "<button id=0><img class='stars' src='star.png'></button>"
-document.getElementById('recipeBlock').innerHTML += "<button id=0><img class='stars' src='star.png'></button>"
-document.getElementById('recipeBlock').innerHTML += "<button id=0><img class='stars' src='star.png'></button>"
+document.getElementById('recipeBlock').innerHTML += "<button><img id=0 class='stars' src='star.png'></button>"
+document.getElementById('recipeBlock').innerHTML += "<button><img id=1 class='stars' src='star.png'></button>"
+document.getElementById('recipeBlock').innerHTML += "<button><img id=2 class='stars' src='star.png'></button>"
+document.getElementById('recipeBlock').innerHTML += "<button><img id=3 class='stars' src='star.png'></button>"
+document.getElementById('recipeBlock').innerHTML += "<button><img id=4 class='stars' src='star.png'></button>"
 
 
 let buttons = document.getElementsByTagName('button')
@@ -113,15 +113,19 @@ for (let button of buttons)
 
 function changeColor(event)
 {
-    console.log(event)
-    let max = event
+    let max = event.srcElement.id
     console.log(max)
     let buttons = document.getElementsByTagName('button')
     for (let i=0;i < buttons.length;i++)
     {
-        if (i < max)
+        buttons[i].style.backgroundColor = '#e7e7e7'
+    }
+
+    for (let i=0;i < buttons.length;i++)
+    {
+        if (i <= max)
         {
-            console.log(1)
+            buttons[i].style.backgroundColor = 'red'
         }
     }
 
