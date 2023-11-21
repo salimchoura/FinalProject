@@ -261,7 +261,15 @@ app.post('/add/user', (req, res) => {
 // path for logging in
 app.post('/login/user', (req, res) => {
   let userData = req.body;
-  let searched = User.find({username: userData.username}).exec();
+  let possUser = new User({
+    username: userData.username,
+    hash: "",
+    salt: "",
+    recipes: [],
+    forums: [],
+    comments: [],
+  });
+  let searched = User.find({username: possUser.username}).exec();
   searched.then((results) => {
     if(results.length == 0) {
       res.end('ACCOUNT DOES NOT EXIST');
