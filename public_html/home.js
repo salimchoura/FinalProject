@@ -1,3 +1,26 @@
+window.onload = () => {
+    let num = window.scrollY / window.innerHeight;
+      let x = 0;
+
+      document.getElementById('filler').style.display = 'none';
+
+      if(num <= 1) {
+        document.getElementById('one').style.opacity = 1-num;
+        x = (1-num)*2;
+        document.getElementById('one').style.transform = 'translate3d('+x+'%,'+x+'%,0px) scale(1,1) rotate(-3deg)';
+      } else if(num > 1 && num <= 2) {
+        document.getElementById('two').style.opacity = 2-num;
+        x = (2-num)*2;
+        document.getElementById('two').style.transform = 'translate3d('+x+'%,-'+x+'%,0px) scale(1,1) rotate(5deg)';
+      } else if(num > 2 && num <= 3) {
+        document.getElementById('three').style.opacity = 3-num;
+        x = (3-num)*2;
+        document.getElementById('three').style.transform = 'translate3d('+x+'%,'+x+'%,0px) scale(1,1) rotate(-15deg)';
+      } else {
+        document.getElementById('filler').style.display = 'block';
+      }
+}
+
 
 var recipes;
 var current = 'x'
@@ -9,41 +32,7 @@ document.getElementById('search').onclick = () =>
     .then((data) => { return data.text() })
     .then((text) => 
     {
-        let data = JSON.parse(text);
-        recipes = data
-        console.log(data)
-        let lower = document.getElementById('recipes')
-        lower.innerHTML = ''
-        // adding the purchases to the DOM
-        for (let i in data)
-        {
-            let recipe = data[i]
-            console.log(recipe)
-            let html = `<br><div class='item'}>
-            <span>Title: <a href='recipe.html' id=${i}>${recipe['title']}</a></span><br>
-            <img src="../images/${recipe['image']}"><br>
-          </div>`
-            lower.innerHTML += html
-        }
-        addListeners()
+        window.localStorage.setItem('recipes', text)
+        window.location.href = 'results.html'
     })
-}
-
-function addListeners()
-{
-    let anchors = document.getElementsByTagName('a')
-    for (let anchor of anchors)
-    {
-        anchor.onclick = (e) =>
-        {
-            e.preventDefault()
-            console.log(e)
-            let index = e.srcElement.id
-            console.log(index)
-            current = recipes[index]
-            console.log(current)
-            window.localStorage.setItem('current', JSON.stringify(current))
-            window.location.href='recipe.html'
-        }
-    }
 }

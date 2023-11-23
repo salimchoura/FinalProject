@@ -1,19 +1,48 @@
 <html lang="en">
     <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel='stylesheet' href="home.css">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Home page</title>
     </head>
     <body>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#about">Sign up</a>
+            <a href="#services">Login</a>
+            <a href="#contact">Contact</a>
+            <div class="box">
+                <i id='search' class="fa fa-search" aria-hidden="true"></i>
+                <input id="key" type="text" name="">
+            </div>
+          </nav>
+        <section class="container">
+            <div class="slider-wrapper">
+                <div class="slider">
+                    <img id="slide-1" src="images/shakshouka.jpg" />
+                    <img id="slide-2" src="./images/tart.jpg" />
+                    <img id="slide-3" src="./images/smoothie.png" />
+                </div>
+                <div class="slider-nav">
+                    <a href="#slide-1"></a>
+                    <a href="#slide-2"></a>
+                    <a href="#slide-3"></a>
+                </div>
+            </div>
+        </section>
 
-        <h2>Search a Recipe</h2>
-
-        <input type="text" id="key">
-        <button id="search"><img id="icon" src="icon.png"></button>
-
-        <div id="recipes"></div>
-        
-        <script src="home.js" type="module"></script>
+        <div class="fade-in"> <!-- Add this class to any element you want to fade in -->
+            <br><br><br><br><br><br>
+            <h1>Your Content Here</h1>
+            <p>More content...</p>
+            <p>More content...</p>
+            <p>More content...</p>
+            <p>More content...</p>
+            <p>More content...</p>
+          </div>
+        <script src="home.js"></script>
     </body>
 </html>
+
+
