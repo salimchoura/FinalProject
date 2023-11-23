@@ -29,6 +29,7 @@ function addUser() {
     });
 }
 
+// needs password matching with hash and salt
 function logInUser() {
     // take from text input
     let user = document.getElementById('logUser').value;
