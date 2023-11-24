@@ -103,11 +103,14 @@ document.getElementById('recipeBlock').innerHTML += "<button><img id=4 class='st
 
 
 let buttons = document.getElementsByTagName('button')
+let stars = 0;
 for (let button of buttons)
 {
     button.onclick = (e) =>
     {
         changeColor(e)
+        let numOfStars = parseInt(button.img.id);
+        stars = numOfStars;
     }
 }
 
@@ -130,4 +133,23 @@ function changeColor(event)
     }
 
 
+}
+
+/**
+ * Adds a review to the current recipe.
+ */
+function addReview() {
+    let user = window.sessionStorage.getItem('username');
+    let recipe = current._id;
+    let newReview = {username : user, numStars : stars, recipeID : recipe};
+    fetch('/make/review', {
+        method: 'POST',
+        body: JSON.stringify(newReview),
+        headers: {'Content-Type' : 'application/json'}
+    }).then((response) => {
+        return response.text();
+    }).then((text) =>{}).catch((error) => {
+        console.log('THERE WAS AN ERROR ADDING A REVIEW');
+        console.log(error);
+    })
 }
