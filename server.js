@@ -30,6 +30,14 @@ db.on('error', () => {
 
 var Schema = mongoose.Schema;
 
+var ReviewSchema = new Schema({
+  user: { type : mongoose.Schema.Types.ObjectId, ref: 'User' },
+  stars: Number,
+  recipe: { type : mongoose.Schema.Types.ObjectId, ref: 'Recipe' },
+});
+
+var Review = mongoose.model('Review', ReviewSchema);
+
 // schema for comments
 var CommentSchema = new Schema({
   date: Date,
@@ -44,6 +52,7 @@ var RecipeSchema = new Schema({
   title: String,
   image: String,
   ingredients: [{'regular' : String, 'substitute' : String}],
+  reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review '}],
   // same here
   //comments: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
   protein: Number,
@@ -72,6 +81,7 @@ var UserSchema = new Schema({
   recipes: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Recipe' }],
   forums: [{ type : mongoose.Schema.Types.ObjectId, ref: 'ForumPost' }],
   comments: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+  reviews: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Review' }],
 });
 var User = mongoose.model('User', UserSchema);
 
@@ -183,6 +193,7 @@ app.post('/add/recipe', upload.single('photo'), (req, res) => {
     title: req.body.title,
     image: req.file.originalname,
     ingredients: JSON.parse(req.body.ingredients),
+    reviews: [],
     instructions: req.body.instructions,
     protein: req.body.protein,
     carbs: req.body.carbs,
@@ -226,6 +237,91 @@ app.get('/search/recipes/:KEYWORD', (req, res) => {
     })
 })
 
+// route for making reviews
+app.post('/make/review', (req, res) => {
+  let data = req.body;
+  let name = data.username;
+  let reviewStars = data.numStars;
+  let recipeID = data.recipeID;
+  let result = User.find({username : name}).exec();
+  result.then((found) => {
+    let currUser = found[0];
+    let userID = currUser._id;
+    let answer = "";
+    let reviewResult = Review.find({user : userID}).exec();
+    reviewResult.then((reviewFound) => {
+      if(reviewFound.length == 0) {
+        // new review to make
+        let recipeResult = Recipe.find({_id : recipeID}).exec();
+        recipeResult.then((recipeFound) => {
+          let currRecipe = recipeFound[0];
+          let newReview = new Review({
+            user: currUser._id,
+            stars: reviewStars,
+            recipe: currRecipe,
+          });
+          currRecipe.reviews.push(newReview);
+          currUser.reviews.push(newReview);
+          let reviewSave = newReview.save();
+          reviewSave.then((reviewSaveResult) => {});
+          reviewSave.catch((error) => {
+            res.end('FAILED TO ADD REVIEW');
+          });
+          let recipeSave = currRecipe.save();
+          recipeSave.then((recipeSaveResult) => {});
+          recipeSave.catch((error) => {
+            res.end('FAILED TO ADD REVIEW');
+          });
+          answer = 'SUCCESSFULLY UPDATED REVIEW';
+          let userSave = currUser.save();
+          userSave.then((userSaveResult) => {
+            res.end(answer);
+          });
+          userSave.catch((error) => {
+            res.end('FAILED TO ADD REVIEW');
+          })
+        })
+      }
+      else {
+        // updating old review
+        let currReview = reviewFound[0];
+        let recipeID = currReview.recipe;
+        let recipeResult = Recipe.find({_id : recipeID}).exec();
+        recipeResult.then((recipeFound) => {
+          let currRecipe = recipeFound[0];
+          currReview.stars = reviewStars;
+          let resaveRecipe = currRecipe.save();
+          resaveRecipe.then((saveResult) => {});
+          resaveRecipe.catch((error) => {
+            res.end('FAILED TO UPDATE REVIEW');
+          });
+          let resaveReview = currReview.save();
+          resaveReview.then((savedResult) => {});
+          resaveReview.catch((error) => {
+            res.end('FAILED TO UPDATE REVIEW');
+          });
+          answer = 'SUCCESSFULLY UPDATED REVIEW';
+          let resaveUser = currUser.save();
+          resaveUser.then((savedUser) => {
+            res.end(answer);
+          });
+          resaveUser.catch((error) => {
+            res.end('FAILED TO UPDATE REVIEW');
+          });
+        }).catch((error) => {
+          res.end('COULD NOT FIND RECIPE FOR REVIEW');
+        });
+      }
+    });
+    reviewResult.catch((error) => {
+      res.end('ERROR ADDING REVIEW');
+    });
+  });
+  result.catch((error) => {
+    res.end('ERROR ADDING REVIEW');
+  });
+});
+
 // path for creating account
 app.post('/add/user', (req, res) => {
   let userData = req.body;
@@ -244,6 +340,7 @@ app.post('/add/user', (req, res) => {
         recipes: [],
         forums: [],
         comments: [],
+        reviews: [],
       });
       let wasSaved = use.save();
       wasSaved.then(() => {
