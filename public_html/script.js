@@ -33,13 +33,13 @@ function addUser() {
 function logInUser() {
     // take from text input
     let user = document.getElementById('logUser').value;
-    let pass = document.getElementById('logPW').value;
-    if(user.trim() == "" || pass.trim() == "") {
+    let passVal = document.getElementById('logPW').value;
+    if(user.trim() == "" || passVal.trim() == "") {
         // don't try to log in empty username
         return;
     }
     // don't include listings or purchases, not making a new account
-    let toLogIn = {username : user, password : pass};
+    let toLogIn = {username : user, pass : passVal};
     let request = fetch('/login/user', {
         method: 'POST',
         body: JSON.stringify(toLogIn),
@@ -49,11 +49,11 @@ function logInUser() {
     request.then((response) => {
         return response.text();
     }).then((text) => {
-        if(text === "LOGIN SUCCESSFUL") {
+        if(text === "SUCCESS") {
             // set current user to the successfully logged-in user
             window.sessionStorage.setItem("username", user);
             // take user to the home page
-            window.location.href = '/app/home.html';
+            window.location.href = '/home.html';
         }
         else {
             // could not log in
