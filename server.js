@@ -53,8 +53,8 @@ var RecipeSchema = new Schema({
   image: String,
   ingredients: [{'regular' : String, 'substitute' : String}],
   reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review '}],
-  // same here
-  //comments: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+  // uncommented this to work on comments
+  comments: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
   protein: Number,
   carbs: Number,
   fat: Number,
@@ -194,6 +194,7 @@ app.post('/add/recipe', upload.single('photo'), (req, res) => {
     image: req.file.originalname,
     ingredients: JSON.parse(req.body.ingredients),
     reviews: [],
+    comments: [],
     instructions: req.body.instructions,
     protein: req.body.protein,
     carbs: req.body.carbs,
@@ -321,6 +322,65 @@ app.post('/make/review', (req, res) => {
     res.end('ERROR ADDING REVIEW');
   });
 });
+
+// route for adding comment to recipe
+app.post('/recipe/comment', (req, res) => {
+  let data = req.body;
+  let name = data.username;
+  let text = data.text;
+  let recipeID = data.recipe;
+  let result = User.find({username : name}).exec();
+  result.then((found) => {
+    let currUser = found[0];
+    let userID = currUser._id;
+    let answer = "";
+    let recipeResult = Recipe.find({_id : recipeID}).exec();
+    recipeResult.then((foundRecipe) => {
+      let currRecipe = foundRecipe[0];
+      let newComment = new Comment({
+        date: Date.now(),
+        text: text,
+      });
+      currRecipe.comments.push(newComment);
+      currUser.comments.push(newComment);
+      let commentSaved = newComment.save();
+      commentSaved.then((saveComment) => {});
+      commentSaved.catch((error) => {
+        res.end('COULD NOT CREATE COMMENT');
+      });
+      let recipeSaved = currRecipe.save();
+      recipeSaved.then((saveRecipe) => {});
+      recipeSaved.catch((error) => {
+        res.end('COULD NOT SAVE COMMENT TO RECIPE');
+      });
+      answer = 'SUCCESSFULLY ADDED COMMENT';
+      let userSaved = currUser.save();
+      userSaved.then((saveUser) => {
+        res.end(answer);
+      });
+      userSaved.catch((error) => {
+        res.end('COULD NOT SAVE COMMENT TO USER');
+      });
+    });
+  });
+});
+
+// get the comments on a recipe for display
+app.get('/recipe/get/comments', (req, res) => {
+  let recipeID = req.body.recipe;
+  let search = Recipe.find({_id : recipeID}).exec();
+  search.then((found) => {
+    let commentList = found[0].comments;
+    let foundComments = Comment.find({_id : { $in: commentList }});
+    foundComments.then((allComments) => {
+      res.end(JSON.stringify(allComments, null, 4));
+    }).catch((error) => {
+      res.end('COULD NOT FIND COMMENTS');
+    });
+  }).catch((error) => {
+    res.end('COULD NOT FIND RECIPE TO GET COMMENTS');
+  })
+})
 
 // path for creating account
 app.post('/add/user', (req, res) => {
