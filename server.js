@@ -261,8 +261,8 @@ app.post('/make/review', (req, res) => {
             stars: reviewStars,
             recipe: currRecipe,
           });
-          currRecipe.reviews.push(newReview);
-          currUser.reviews.push(newReview);
+          currRecipe.reviews.push(newReview._id);
+          currUser.reviews.push(newReview._id);
           let reviewSave = newReview.save();
           reviewSave.then((reviewSaveResult) => {});
           reviewSave.catch((error) => {
@@ -340,8 +340,8 @@ app.post('/recipe/add/comment', (req, res) => {
         date: Date.now(),
         text: text,
       });
-      currRecipe.comments.push(newComment);
-      currUser.comments.push(newComment);
+      currRecipe.comments.push(newComment._id);
+      currUser.comments.push(newComment._id);
       let commentSaved = newComment.save();
       commentSaved.then((saveComment) => {});
       commentSaved.catch((error) => {
@@ -437,6 +437,48 @@ app.get('/recipe/get/comments', (req, res) => {
     });
   }).catch((error) => {
     res.end('COULD NOT FIND RECIPE TO GET COMMENTS');
+  });
+});
+
+// add forum posts
+app.post('/add/forum', (req, res) => {
+  let data = req.body;
+  let name = data.username;
+  let postTitle = data.title;
+  let postContent = data.content;
+  let currDate = Date.now();
+  let answer = "";
+  let result = User.find({username : name}).exec();
+  result.then((found) => {
+    if(found.length == 1) {
+      let currUser = found[0];
+      let newPost = new ForumPost({
+        date : currDate,
+        title : postTitle,
+        text : postContent,
+        comments : [],
+      });
+      currUser.forums.push(newPost._id);
+      let saved = newPost.save();
+      saved.then((saveRes) => {});
+      saved.catch((error) => {
+        res.end('FAILED TO SAVE NEW POST');
+      });
+      answer = 'SUCCESSFULLY CREATED POST';
+      let userSave = currUser.save();
+      userSave.then((saveResult) => {
+        res.end(answer);
+      });
+      userSave.catch((error) => {
+        res.end('FAILED TO SAVE NEW POST');
+      });
+    }
+    else {
+      res.end('FAILED TO FIND USER WHO MADE THE POST');
+    }
+  });
+  result.catch((error) => {
+    res.end('FAILED TO FIND USER WHO MADE POST');
   });
 });
 
