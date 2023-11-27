@@ -324,7 +324,7 @@ app.post('/make/review', (req, res) => {
 });
 
 // route for adding comment to recipe
-app.post('/recipe/comment', (req, res) => {
+app.post('/recipe/add/comment', (req, res) => {
   let data = req.body;
   let name = data.username;
   let text = data.text;
@@ -332,7 +332,6 @@ app.post('/recipe/comment', (req, res) => {
   let result = User.find({username : name}).exec();
   result.then((found) => {
     let currUser = found[0];
-    let userID = currUser._id;
     let answer = "";
     let recipeResult = Recipe.find({_id : recipeID}).exec();
     recipeResult.then((foundRecipe) => {
@@ -362,6 +361,65 @@ app.post('/recipe/comment', (req, res) => {
         res.end('COULD NOT SAVE COMMENT TO USER');
       });
     });
+    recipeResult.catch((error) => {
+      res.end('FAILED TO FIND RECIPE');
+    });
+  });
+  result.catch((error) => {
+    res.end('FAILED TO FIND USER');
+  })
+});
+
+// route for editing a comment on a recipe
+// assumes that the user was the one who made the comment which should be
+// checked on the frontend
+app.post('/recipe/edit/comment', (req, res) => {
+  let data = req.body;
+  let name = data.username;
+  let newText = data.text;  // new comment text
+  let recipeID = data.recipe; // to find the recipe for the comment
+  let commentID = data.comment; // to find the comment itself
+  let result = User.find({username : name}).exec();
+  result.then((found) => {
+    let currUser = found[0];
+    let answer = "";
+    let recipeResult = Recipe.find({_id : recipeID}).exec();
+    recipeResult.then((recipeFind) => {
+      let currRecipe = recipeFind[0];
+      let commResult = Comment.find({_id : commentID});
+      commResult.then((commFind) => {
+        let currComment = commFind[0];
+        currComment.text = newText;
+        // resave everything to make sure new text is remembered
+        let commSave = currComment.save();
+        commSave.then((saveResult) => {});
+        commSave.catch((error) => {
+          res.end('FAILED TO SAVE NEW COMMENT TEXT');
+        });
+        let recipeSave = currRecipe.save();
+        recipeSave.then((saveRes) => {});
+        recipeSave.catch((error) => {
+          res.end('FAILED TO SAVE NEW COMMENT WITH RECIPE');
+        });
+        answer = 'SUCCESSFULLY EDITED COMMENT';
+        let userSave = currUser.save();
+        userSave.then((useSaveResult) => {
+          res.end(answer);
+        });
+        userSave.catch((error) => {
+          res.end('FAILED TO SAVE COMMENT TO USER');
+        });
+      });
+      commResult.catch((error) => {
+        res.end('COULD NOT FIND COMMENT');
+      });
+    });
+    recipeResult.catch((error) => {
+      res.end('COULD NOT FIND RECIPE THE COMMENT WAS ON');
+    });
+  });
+  result.catch((error) => {
+    res.end('COULD NOT FIND USER WHO MADE THE COMMENT');
   });
 });
 
@@ -379,8 +437,8 @@ app.get('/recipe/get/comments', (req, res) => {
     });
   }).catch((error) => {
     res.end('COULD NOT FIND RECIPE TO GET COMMENTS');
-  })
-})
+  });
+});
 
 // path for creating account
 app.post('/add/user', (req, res) => {
