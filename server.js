@@ -249,7 +249,10 @@ app.post('/make/review', (req, res) => {
     let currUser = found[0];
     let userID = currUser._id;
     let answer = "";
-    let reviewResult = Review.find({user : userID}).exec();
+    let reviewResult = Review.find({
+      user : userID,
+      recipe : recipeID,
+    }).exec();  // find reviews made by that user for that recipe
     reviewResult.then((reviewFound) => {
       if(reviewFound.length == 0) {
         // new review to make
@@ -290,6 +293,9 @@ app.post('/make/review', (req, res) => {
         let recipeResult = Recipe.find({_id : recipeID}).exec();
         recipeResult.then((recipeFound) => {
           let currRecipe = recipeFound[0];
+          if(currUser.reviews.includes(currReview._id) == false) {
+            res.end('YOU DO NOT HAVE PERMISSION TO EDIT THIS REVIEW');
+          }
           currReview.stars = reviewStars;
           let resaveRecipe = currRecipe.save();
           resaveRecipe.then((saveResult) => {});
@@ -389,6 +395,9 @@ app.post('/recipe/edit/comment', (req, res) => {
       let commResult = Comment.find({_id : commentID});
       commResult.then((commFind) => {
         let currComment = commFind[0];
+        if(currUser.comments.includes(commentID) == false) {
+          res.end('YOU DO NOT HAVE PERMISSION TO EDIT THIS COMMENT');
+        }
         currComment.text = newText;
         // resave everything to make sure new text is remembered
         let commSave = currComment.save();
@@ -498,9 +507,13 @@ app.post('/edit/forum', (req, res) => {
   let result = User.find({username : user}).exec();
   result.then((found) => {
     let currUser = found[0];
+    if(currUser.forums.includes(postID) == false) {
+      res.end('YOU DO NOT HAVE PERMISSION TO EDIT THIS FORUM POST');
+    }
     let postResult = ForumPost.find({_id : postID}).exec();
     postResult.then((foundPosts) => {
       let currForum = foundPosts[0];
+      // update the post's properties
       currForum.text = newText;
       currForum.title = newTitle;
       let saveResult = currForum.save();
