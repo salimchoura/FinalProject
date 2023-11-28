@@ -482,6 +482,50 @@ app.post('/add/forum', (req, res) => {
   });
 });
 
+// route for editing a forum post
+// expects a JSON object in the body of the request with the parameters:
+// username: the username of the user who made/wants to edit the post
+// forumID: the ObjectId of the Forum Post to edit
+// title: the updated title of the post
+// content: the updated text of the post
+app.post('/edit/forum', (req, res) => {
+  let data = req.body;
+  let user = data.username;
+  let postID = data.forumID;
+  let newTitle = data.title;
+  let newText = data.content;
+  let answer = "";
+  let result = User.find({username : user}).exec();
+  result.then((found) => {
+    let currUser = found[0];
+    let postResult = ForumPost.find({_id : postID}).exec();
+    postResult.then((foundPosts) => {
+      let currForum = foundPosts[0];
+      currForum.text = newText;
+      currForum.title = newTitle;
+      let saveResult = currForum.save();
+      saveResult.then((postSaved) => {});
+      saveResult.catch((error) => {
+        res.end('FAILED TO UPDATE FORUM POST CONTENTS');
+      });
+      answer = 'SUCCESSFULLY UPDATED FORUM POST';
+      let userSaveResult = currUser.save();
+      userSaveResult.then((userSaved) => {
+        res.end(answer);
+      });
+      userSaveResult.catch((error) => {
+        res.end('FAILED TO UPDATE USER FORUM POST');
+      });
+    });
+    postResult.catch((error) => {
+      res.end('FAILED TO FIND POST TO UPDATE');
+    });
+  });
+  result.catch((error) => {
+    res.end('FAILED TO FIND USER WHO MADE THIS POST');
+  });
+});
+
 // path for creating account
 app.post('/add/user', (req, res) => {
   let userData = req.body;
