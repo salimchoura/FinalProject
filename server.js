@@ -594,7 +594,7 @@ app.post('/forum/add/comment', (req, res) => {
         res.end('COULD NOT CREATE COMMENT');
       });
       let forumSaved = currForum.save();
-      forumSaved.then((saveRecipe) => {});
+      forumSaved.then((saveForum) => {});
       forumSaved.catch((error) => {
         res.end('COULD NOT SAVE COMMENT TO FORUM POST');
       });
