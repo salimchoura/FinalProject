@@ -1,0 +1,3 @@
+---RECIPES FOR TESTING PURPOSES--
+Feel free to add your own! These are basically test cases, just copy paste them in.
+Also, remember to add the images for them to the images folder.
