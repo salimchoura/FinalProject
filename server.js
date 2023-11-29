@@ -616,6 +616,60 @@ app.post('/forum/add/comment', (req, res) => {
   })
 });
 
+// route for editing a comment on a forum
+app.post('/forum/edit/comment', (req, res) => {
+  let data = req.body;
+  let name = data.username;
+  let newText = data.text;  // new comment text
+  let forumID = data.forum; // to find the post for the comment
+  let commentID = data.comment; // to find the comment itself
+  let result = User.find({username : name}).exec();
+  result.then((found) => {
+    let currUser = found[0];
+    let answer = "";
+    let forumResult = ForumPost.find({_id : forumID}).exec();
+    forumResult.then((forumFind) => {
+      let currForum = forumFind[0];
+      let commResult = Comment.find({_id : commentID});
+      commResult.then((commFind) => {
+        let currComment = commFind[0];
+        if(currUser.comments.includes(commentID) == false) {
+          res.end('YOU DO NOT HAVE PERMISSION TO EDIT THIS COMMENT');
+        }
+        currComment.text = newText;
+        // resave everything to make sure new text is remembered
+        let commSave = currComment.save();
+        commSave.then((saveResult) => {});
+        commSave.catch((error) => {
+          res.end('FAILED TO SAVE NEW COMMENT TEXT');
+        });
+        let forumSave = currForum.save();
+        forumSave.then((saveRes) => {});
+        forumSave.catch((error) => {
+          res.end('FAILED TO SAVE NEW COMMENT WITH FORUM POST');
+        });
+        answer = 'SUCCESSFULLY EDITED COMMENT';
+        let userSave = currUser.save();
+        userSave.then((useSaveResult) => {
+          res.end(answer);
+        });
+        userSave.catch((error) => {
+          res.end('FAILED TO SAVE COMMENT TO USER');
+        });
+      });
+      commResult.catch((error) => {
+        res.end('COULD NOT FIND COMMENT');
+      });
+    });
+    forumResult.catch((error) => {
+      res.end('COULD NOT FIND FORUM POST THE COMMENT WAS ON');
+    });
+  });
+  result.catch((error) => {
+    res.end('COULD NOT FIND USER WHO MADE THE COMMENT');
+  });
+});
+
 // path for creating account
 app.post('/add/user', (req, res) => {
   let userData = req.body;
