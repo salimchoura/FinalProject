@@ -670,6 +670,28 @@ app.post('/forum/edit/comment', (req, res) => {
   });
 });
 
+// Route for getting all the comments on a single forum post
+// Expects a request body that is a JSON string including the ObjectId
+// of the ForumPost in question
+app.get('/forum/get/comments', (req, res) => {
+  let data = req.body;
+  let forumID = data.forum;
+  let searched = ForumPost.find({_id : forumID}).exec();
+  searched.then((found) => {
+    let allComments = found[0].comments;
+    let foundComments = Comment.find({_id : { $in: allComments }});
+    foundComments.then((results) => {
+      res.end(JSON.stringify(results, null, 4));
+    });
+    foundComments.catch((error) => {
+      res.end('COULD NOT FIND COMMENTS');
+    });
+  });
+  searched.catch((error) => {
+    res.end('COULD NOT FIND FORUM POST TO GET COMMENTS');
+  });
+});
+
 // path for creating account
 app.post('/add/user', (req, res) => {
   let userData = req.body;
