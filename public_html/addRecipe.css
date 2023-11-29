@@ -28,7 +28,7 @@ body {
   }
   
   input, textarea {
-    width: 100%;
+    width: 40%;
     padding: 10px;
     box-sizing: border-box;
     border: 1px solid #ccc;
