@@ -68,6 +68,7 @@ var PostSchema = new Schema({
   date: Date,
   title: String,
   text: String,
+  tag: String,
   comments: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
 });
 
@@ -449,12 +450,23 @@ app.get('/recipe/get/comments', (req, res) => {
   });
 });
 
-// add forum posts
+// Route to add forum posts
+// Expected JSON object has the following parameters:
+// username: username of the user making the post
+// title: title of the post
+// content: content of the post (ie the text)
+// tag: tag on the post. In the project doc we specified that this is either
+// a Question or a Helpful Tidbit, but we could make these free-response as
+// well (which is why I put it as a string, so wecould easily change the names
+// or add new ones easily; if we wanted to stick to just two possible options
+// we could make buttons or radio buttons on the client side).
 app.post('/add/forum', (req, res) => {
   let data = req.body;
   let name = data.username;
   let postTitle = data.title;
   let postContent = data.content;
+  let postTag = data.tag; // tag on the post; I noticed we had this 
+                          // in the project doc so I added it here.
   let currDate = Date.now();
   let answer = "";
   let result = User.find({username : name}).exec();
@@ -465,6 +477,7 @@ app.post('/add/forum', (req, res) => {
         date : currDate,
         title : postTitle,
         text : postContent,
+        tag : postTag,
         comments : [],
       });
       currUser.forums.push(newPost._id);
