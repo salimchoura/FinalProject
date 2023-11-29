@@ -41,6 +41,7 @@ var Review = mongoose.model('Review', ReviewSchema);
 // schema for comments
 var CommentSchema = new Schema({
   date: Date,
+  user: { type : mongoose.Schema.Types.ObjectId, ref: 'User' },
   text: String,
 });
 
@@ -345,6 +346,7 @@ app.post('/recipe/add/comment', (req, res) => {
       let currRecipe = foundRecipe[0];
       let newComment = new Comment({
         date: Date.now(),
+        user: currUser._id,
         text: text,
       });
       currRecipe.comments.push(newComment._id);
@@ -564,6 +566,54 @@ app.get('/search/forum/:keyword', (req, res) => {
   result.catch((error) => {
     res.end('COULD NOT SEARCH FORUM POSTS');
   });
+});
+
+// route for adding comment to forum post
+app.post('/forum/add/comment', (req, res) => {
+  let data = req.body;
+  let name = data.username;
+  let text = data.text;
+  let forumID = data.forum;
+  let result = User.find({username : name}).exec();
+  result.then((found) => {
+    let currUser = found[0];
+    let answer = "";
+    let forumResult = ForumPost.find({_id : forumID}).exec();
+    forumResult.then((foundForum) => {
+      let currForum = foundForum[0];
+      let newComment = new Comment({
+        date: Date.now(),
+        user: currUser._id,
+        text: text,
+      });
+      currForum.comments.push(newComment._id);
+      currUser.comments.push(newComment._id);
+      let commentSaved = newComment.save();
+      commentSaved.then((saveComment) => {});
+      commentSaved.catch((error) => {
+        res.end('COULD NOT CREATE COMMENT');
+      });
+      let forumSaved = currForum.save();
+      forumSaved.then((saveRecipe) => {});
+      forumSaved.catch((error) => {
+        res.end('COULD NOT SAVE COMMENT TO FORUM POST');
+      });
+      answer = 'SUCCESSFULLY ADDED COMMENT';
+      let userSaved = currUser.save();
+      userSaved.then((saveUser) => {
+        res.end(answer);
+      });
+      userSaved.catch((error) => {
+        res.end('COULD NOT SAVE COMMENT TO USER');
+      });
+    });
+    forumResult.catch((error) => {
+      res.end('FAILED TO FIND FORUM POST');
+    });
+  });
+  result.catch((error) => {
+    res.end('FAILED TO FIND USER');
+  })
 });
 
 // path for creating account
