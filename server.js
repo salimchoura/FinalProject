@@ -552,6 +552,20 @@ app.post('/edit/forum', (req, res) => {
   });
 });
 
+// Search for forum posts by keyword. Note that the keyword search is
+// for the entire forum post text, not the title (so we don't leave
+// out potentially helpful results)
+app.get('/search/forum/:keyword', (req, res) => {
+  let word = req.params.keyword;
+  let result = ForumPost.find({text : {$regex : word}}).exec();
+  result.then((found) => {
+    res.end(JSON.stringify(found, null, 4));
+  });
+  result.catch((error) => {
+    res.end('COULD NOT SEARCH FORUM POSTS');
+  });
+});
+
 // path for creating account
 app.post('/add/user', (req, res) => {
   let userData = req.body;
