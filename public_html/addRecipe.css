@@ -3,54 +3,94 @@
     Course: csc 337
     Description: This file is a style file for our post.html
 */
+/* addRecipe.css */
 
-body{
-    background-color:whitesmoke;
-    color: orangered;
-}
+/* addRecipe.css */
 
-h1
-{
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fce4ec;
+  }
+  
+  h1 {
+    text-align: center;
     margin-top: 50px;
-    margin-left: 30px;
-}
-
-h2
-{
-    margin-left: 30px;
-}
-
-label
-{
-    margin-left: 30px;
+    font-size: 2em;
+    color: #333;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  label, input, textarea {
+    display: block;
+    margin-top: 10px;
+    opacity: 0;
+    animation: slideIn 1s forwards;
+  }
+  
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+  }
+  
+  input:focus, textarea:focus {
+    border-color: #4CAF50;
+  }
+  
+  label {
+    font-weight: bold;
+    color: #555;
+  }
+  
+  #image, textarea {
+    display: block;
+    margin-top: 10px;
+  }
+  
+  #ingredients div {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  #addSpace, #post {
     margin-top: 20px;
-}
-
-#title, #ins, #protein, #carbs, #fat{
-    display:fixed;
-    float: right;
-    margin-right: 600px;
-}
-
-#post{
-    margin-left: 30px;
-}
-
-button
-{
-    margin-left: 400px;
-}
-
-#avocado
-{
-    z-index: -20;
-    position: absolute;
-    margin-top: -20px;
-    margin-left: 130px;
-    width: 200px;
-}
-
-textarea
-{
-    margin-left: 200px;
-}
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  #addSpace:hover, #post:hover {
+    background-color: #45a049;
+  }
+  
+  /* Animation keyframes */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
