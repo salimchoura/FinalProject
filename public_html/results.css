@@ -1,0 +1,61 @@
+/**
+    Author: Salim Choura and Yanxiao Chen
+    Course: csc 337
+    Description: This file is a style file for our result.html
+*/
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #FFB6C1;
+  }
+  
+  #recipes {
+    width: 50%; /* Set the width to 50% of the viewport width */
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+    background: #fff; /* Background color for the recipes container */
+  }
+  
+  .item {
+    margin-bottom: 20px;
+  }
+  
+  .item a {
+    font-size: 1.5em; /* Adjust the font size as needed */
+    font-family: 'Georgia', serif; /* Change the font family */
+    text-decoration: none;
+    color: #333; /* Adjust the color as needed */
+  }
+  
+  .item a:hover {
+    color: #4CAF50; /* Adjust the hover color as needed */
+  }
+  
+  .item img {
+    width: 100%; /* Make the image fill its container width */
+    height: 100%; /* Make the image fill its container height */
+    object-fit: cover; /* Cover the entire container while maintaining aspect ratio */
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  
+  .item:hover img {
+    opacity: 0.8; /* Adjust the opacity on hover as needed */
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+}  
