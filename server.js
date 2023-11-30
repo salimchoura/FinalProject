@@ -183,6 +183,8 @@ app.use(express.static('public_html'));
 app.listen(port, () => 
   console.log(`App listening at http://localhost:${port}`));
 
+// make sure users are logged in if they are to add recipes
+app.use('/add/recipe', authenticate);
 
 // should be changed to add/recipe/:USERNAME but currently testing
 app.post('/add/recipe', upload.single('photo'), (req, res) => {
@@ -239,6 +241,9 @@ app.get('/search/recipes/:KEYWORD', (req, res) => {
       console.log('error getting items from db', error)
     })
 })
+
+// make sure users are logged in before they review
+app.use('/make/review', authenticate);
 
 // route for making reviews
 app.post('/make/review', (req, res) => {
@@ -331,6 +336,9 @@ app.post('/make/review', (req, res) => {
   });
 });
 
+// make sure only logged in users are able to add comments
+app.use('/recipe/add/comment', authenticate);
+
 // route for adding comment to recipe
 app.post('/recipe/add/comment', (req, res) => {
   let data = req.body;
@@ -378,6 +386,9 @@ app.post('/recipe/add/comment', (req, res) => {
     res.end('FAILED TO FIND USER');
   })
 });
+
+// make sure users are logged in before they can edit their comments
+app.use('/recipe/edit/comment', authenticate);
 
 // route for editing a comment on a recipe
 // assumes that the user was the one who made the comment which should be
@@ -452,6 +463,9 @@ app.get('/recipe/get/comments', (req, res) => {
   });
 });
 
+// make sure users are logged in before they can add a forum post
+app.use('/add/forum', authenticate);
+
 // Route to add forum posts
 // Expected JSON object has the following parameters:
 // username: username of the user making the post
@@ -505,6 +519,9 @@ app.post('/add/forum', (req, res) => {
     res.end('FAILED TO FIND USER WHO MADE POST');
   });
 });
+
+// make sure users are logged in before they edit posts
+app.use('/edit/forum', authenticate);
 
 // route for editing a forum post
 // expects a JSON object in the body of the request with the parameters:
@@ -568,6 +585,9 @@ app.get('/search/forum/:keyword', (req, res) => {
   });
 });
 
+// make sure users are logged in before commenting
+app.use('/forum/add/comment', authenticate);
+
 // route for adding comment to forum post
 app.post('/forum/add/comment', (req, res) => {
   let data = req.body;
@@ -615,6 +635,9 @@ app.post('/forum/add/comment', (req, res) => {
     res.end('FAILED TO FIND USER');
   })
 });
+
+// make sure users are logged in before they edit their comments
+app.use('/forum/edit/comment', authenticate);
 
 // route for editing a comment on a forum
 app.post('/forum/edit/comment', (req, res) => {
