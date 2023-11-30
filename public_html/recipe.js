@@ -104,14 +104,15 @@ document.getElementById('recipeBlock').innerHTML += "<button><img id=4 class='st
 
 
 let buttons = document.getElementsByTagName('button')
-let stars = 0;
 for (let button of buttons)
 {
     button.onclick = (e) =>
     {
         changeColor(e)
-        let numOfStars = parseInt(button.img.id);
-        stars = numOfStars;
+        let current = button.getElementsByTagName('img')[0];
+        let numStars = parseInt(current.id);
+        let stars = numStars + 1;
+        addRecipe(stars);
     }
 }
 
@@ -139,7 +140,7 @@ function changeColor(event)
 /**
  * Adds a review to the current recipe.
  */
-function addReview() {
+function addReview(stars) {
     let user = window.sessionStorage.getItem('username');
     let recipe = current._id;
     let newReview = {username : user, numStars : stars, recipeID : recipe};
@@ -149,7 +150,14 @@ function addReview() {
         headers: {'Content-Type' : 'application/json'}
     }).then((response) => {
         return response.text();
-    }).then((text) =>{}).catch((error) => {
+    }).then((text) =>{
+        if(text == 'SUCCESSFULLY UPDATED REVIEW') {
+            // handle success
+        }
+        else {
+            // handle failure
+        }
+    }).catch((error) => {
         console.log('THERE WAS AN ERROR ADDING A REVIEW');
         console.log(error);
     })
