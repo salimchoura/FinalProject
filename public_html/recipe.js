@@ -112,7 +112,7 @@ for (let button of buttons)
         let current = button.getElementsByTagName('img')[0];
         let numStars = parseInt(current.id);
         let stars = numStars + 1;
-        addRecipe(stars);
+        addReview(stars);
     }
 }
 
