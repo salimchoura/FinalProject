@@ -187,13 +187,13 @@ app.listen(port, () =>
   console.log(`App listening at http://localhost:${port}`));
 
 // make sure users are logged in if they are to add recipes - extra guard
-app.use('/add/recipe', authenticate);
+app.use('/add/recipe/*', authenticate);
 
 // should be changed to add/recipe/:USERNAME but currently testing
-app.post('/add/recipe', upload.single('photo'), (req, res) => {
+app.post('/add/recipe/:username', upload.single('photo'), (req, res) => {
 
   // get the username from the request parameters
-  console.log('a')
+  let username = req.params.username
   console.log(typeof(req.body.ingredients))
   console.log(req.body.ingredients)
   let recipe = {
@@ -207,22 +207,20 @@ app.post('/add/recipe', upload.single('photo'), (req, res) => {
     carbs: req.body.carbs,
     fat: req.body.fat,
   }
-  console.log(recipe)
   // create a new item object and save it to the database
-  const newRecipe = new Recipe(recipe);
-  console.log('b')
+  let newRecipe = new Recipe(recipe);
   newRecipe.save().then(() => {
     console.log('new recipe saved');
   }).catch((error) => { console.log('could not save new recipe', error) })
 
   // add the new item to the user's listings array
-  /*let p = User.findOne({ username: username }).exec()
+  let p = User.findOne({ username: username }).exec()
   p.then((user) => {
-    user.listings.push(newItem.id)
-    user.save().then(() => { console.log('update of listings made') })
-      .catch((error) => { console.log('failed to update listing', error) })
+    user.recipes.push(newRecipe.id)
+    user.save().then(() => { console.log('update of user recipes list made') })
+      .catch((error) => { console.log('failed to update of user recipes list', error) })
   })
-    .catch((error) => { console.log('could not add item to user listing', error) })*/
+    .catch((error) => { console.log('could not add item to user listing', error) })
 })
 
 app.get('/search/recipes/:KEYWORD', (req, res) => {

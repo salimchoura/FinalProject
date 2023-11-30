@@ -9,6 +9,9 @@ document.getElementById('addSpace').onclick = () => {
     document.getElementById('ingredients').innerHTML += child
 }
 
+
+
+
 document.getElementById('post').onclick = addRecipe
 
 
@@ -48,11 +51,16 @@ function addRecipe() {
     formData.append('ingredients', JSON.stringify(ingredients));
     console.log(formData)
 
-    let url = '/add/recipe';
+    let data = decodeURIComponent(document.cookie)
+    let sliced = data.slice(8, data.length + 1)
+    let converted = JSON.parse(sliced)
+    let username = converted['username']
+    let url = '/add/recipe/' + username;
+
     p = fetch(url, {
         method: "POST",
         body: formData,
-        'header':{'Content-Type':'application/json'}
+        'header': { 'Content-Type': 'application/json' }
     })
 
     // Log a message if the POST request was successful
@@ -64,26 +72,5 @@ function addRecipe() {
     p.catch(() => {
         console.log('something went wrong while requesting posting an item');
     })
-
-
-    /*
-  fetch('/get/currentUser').then((data) => { return data.text() }).then((data) => {
-      let url = '/add/item/' + data;
-      console.log(url);
-      console.log(formData)
-      p = fetch(url, {
-          method: "POST",
-          body: formData
-        })
-      
-        // Log a message if the POST request was successful
-        p.then((data) =>{ return data.text()
-        }).then((text) => {if (text != undefined) {console.log(text)}})
-      
-        // Show an alert message if the POST request failed
-        p.catch(()=>{
-          console.log('something went wrong while requesting posting an item');
-        })
-    })*/
 }
 
