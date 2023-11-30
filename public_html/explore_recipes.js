@@ -37,3 +37,8 @@ function addListeners()
         }
     }
 }
+
+document.getElementById('addRecipe').onclick = () =>
+{
+    window.location = 'addRecipe.html'
+}

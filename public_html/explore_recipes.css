@@ -126,3 +126,13 @@ img
 {
     font-size: 50px
 }
+
+#addRecipe
+{
+    background-color: #E1AD01;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
