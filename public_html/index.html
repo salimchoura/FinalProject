@@ -11,43 +11,51 @@
 
   <body>
 
-    <h2>Food Social Media</h2>
+    <nav>
+      <h1 id="title">Foody</h1>
+      <a href="home.html">Home</a>
+      <a href="index.html">Sign up / Login</a>
+      <a href="#contact">Help</a>
+      <a href="#contact">Explore forum</a>
+      <a href="explore_recipes.html">Explore recipes</a>
+    </nav><br><br><br><br><br>
 
-    <div id = "login">
+    <div id="blocks">
+      <div id = "login" class="flex-item">
 
-      <h1>Login</h1>
-      <label for="logUser">Username</label>
-      <input type="text" id="logUser" value="">
-      <br>
-      <br>
-      <label for="logPW">Password</label>
-      <input type="password" id="logPW" value="">
-      <br>
-      <br>
-      <button type="button" onclick="logInUser()">Login</button>
-      <br>
-      <!-- paragraph below is to indicate if user couldn't log in -->
-      <p id="warning"> </p>
-      
+        <h1>Login</h1>
+        <label for="logUser">Username</label>
+        <input type="text" id="logUser" value="">
+        <br>
+        <br>
+        <label for="logPW">Password</label>
+        <input type="password" id="logPW" value="">
+        <br>
+        <br>
+        <button type="button" onclick="logInUser()">Login</button>
+        <br>
+        <!-- paragraph below is to indicate if user couldn't log in -->
+        <p id="warning"> </p>
+        
+      </div>
+  
+  
+      <div id = "createAcc" class="flex-item">
+  
+        <h1>Create Account</h1>
+        <label for="username">Username</label>
+        <input type="text" id="username" value="">
+        <br>
+        <br>
+        <label for="password">Password</label>
+        <input type="password" id="password" value="">
+        <br>
+        <br>
+        <button type="button" onclick="addUser()">Create Account</button>
+        
+      </div>
     </div>
-
-    <br>
-    <br>
-
-    <div id = "createAcc">
-
-      <h1>Create Account</h1>
-      <label for="username">Username</label>
-      <input type="text" id="username" value="">
-      <br>
-      <br>
-      <label for="password">Password</label>
-      <input type="password" id="password" value="">
-      <br>
-      <br>
-      <button type="button" onclick="addUser()">Create Account</button>
-      
-    </div>
+    
 
   </body>
 

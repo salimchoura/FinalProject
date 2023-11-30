@@ -1,3 +1,4 @@
+console.log(window.localStorage.getItem('current'))
 let current = JSON.parse(window.localStorage.getItem('current'))
 
 

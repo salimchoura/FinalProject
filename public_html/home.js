@@ -22,17 +22,3 @@ window.onload = () => {
 }
 
 
-var recipes;
-var current = 'x'
-
-document.getElementById('search').onclick = () =>
-{
-    let keyword = document.getElementById('key').value
-    fetch('/search/recipes/' + keyword)
-    .then((data) => { return data.text() })
-    .then((text) => 
-    {
-        window.localStorage.setItem('recipes', text)
-        window.location.href = 'results.html'
-    })
-}
