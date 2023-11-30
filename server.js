@@ -105,7 +105,7 @@ function addSession(username) {
  * tracker so those users are no longer logged in.
  */ 
 function removeSession() {
-  let sessLength = 120000;    // session length is 2 minutes for now, for testing
+  let sessLength = 60000 * 10;    // session length is 10 mins for testing
   let now = Date.now();
   let usernames = Object.keys(sessions);
   for(let i = 0; i < usernames.length; i++) {
@@ -772,7 +772,7 @@ app.post('/login/user', (req, res) => {
         let sid = addSession(userData.username);
         res.cookie("login", 
           {username: userData.username, sessionID: sid}, 
-          {maxAge: 60000 * 2 });  // can change max age if needed
+          {maxAge: 60000 * 10 });  // can change max age if needed
         res.end('SUCCESS');
       }
       else {
