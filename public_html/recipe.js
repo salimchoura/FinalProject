@@ -169,12 +169,8 @@ function addReview(stars) {
 function showReviews() {
     let id = current._id;
     let query = {recipe : id};
-    let url = '/get/reviews';
-    let result = fetch(url, {
-        method: 'GET',
-        body: query,
-        headers: {'Content-Type' : 'application/json'}
-    });
+    let url = '/get/reviews' + id;
+    let result = fetch(url);
     result.then((response) => {
         return response.text();
     }).then((text) => {

@@ -338,9 +338,8 @@ app.post('/make/review', (req, res) => {
 });
 
 // route to get all the reviews on a specific recipe
-app.get('/get/reviews', (req, res) => {
-  let data = req.body;
-  let recipeID = data.recipe;
+app.get('/get/reviews/:recipe', (req, res) => {
+  let recipeID = req.params.recipe;
   let result = Review.find({recipe : recipeID}).exec();
   result.then((found) => {
     res.end(JSON.stringify(found));
@@ -461,8 +460,8 @@ app.post('/recipe/edit/comment', (req, res) => {
 });
 
 // get the comments on a recipe for display
-app.get('/recipe/get/comments', (req, res) => {
-  let recipeID = req.body.recipe;
+app.get('/recipe/get/comments/:recipe', (req, res) => {
+  let recipeID = req.params.recipe;
   let search = Recipe.find({_id : recipeID}).exec();
   search.then((found) => {
     let commentList = found[0].comments;
@@ -708,11 +707,8 @@ app.post('/forum/edit/comment', (req, res) => {
 });
 
 // Route for getting all the comments on a single forum post
-// Expects a request body that is a JSON string including the ObjectId
-// of the ForumPost in question
-app.get('/forum/get/comments', (req, res) => {
-  let data = req.body;
-  let forumID = data.forum;
+app.get('/forum/get/comments/:forum', (req, res) => {
+  let forumID = req.params.forum;
   let searched = ForumPost.find({_id : forumID}).exec();
   searched.then((found) => {
     let allComments = found[0].comments;
