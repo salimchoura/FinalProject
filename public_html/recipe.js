@@ -160,5 +160,39 @@ function addReview(stars) {
     }).catch((error) => {
         console.log('THERE WAS AN ERROR ADDING A REVIEW');
         console.log(error);
+    });
+}
+
+/* 
+ * Show the reviews on the recipe.
+ */
+function showReviews() {
+    let id = current._id;
+    let query = {recipe : id};
+    let url = '/get/reviews';
+    let result = fetch(url, {
+        method: 'GET',
+        body: query,
+        headers: {'Content-Type' : 'application/json'}
+    });
+    result.then((response) => {
+        return response.text();
+    }).then((text) => {
+        if(text == 'COULD NOT FIND REVIEWS') {
+            document.getElementById('recipeBlock').innerHTML += '<p>Could not load reviews.</p>';
+        }
+        else {
+            let reviews = JSON.parse(text);
+            // put the reviews into HTML
+            for(let review of reviews) {
+                // add each review to the DOM
+                document.getElementById('recipeBlock').innerHTML += '<h3>' + review.user + '<h3>';
+                let numStars = review.stars;
+                // add each star for the user
+                for(let i = 0; i < numStars; i++) {
+                    document.getElementById('recipeBlock').innerHTML += "<img class='reviewStars' src='star.png'>";
+                }
+            }
+        }
     })
 }

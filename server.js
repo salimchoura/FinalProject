@@ -337,6 +337,19 @@ app.post('/make/review', (req, res) => {
   });
 });
 
+// route to get all the reviews on a specific recipe
+app.get('/get/reviews', (req, res) => {
+  let data = req.body;
+  let recipeID = data.recipe;
+  let result = Review.find({recipe : recipeID}).exec();
+  result.then((found) => {
+    res.end(JSON.stringify(found));
+  });
+  result.catch((error) => {
+    res.end('COULD NOT FIND REVIEWS');
+  });
+});
+
 // make sure only logged in users are able to add comments - extra guard
 app.use('/recipe/add/comment', authenticate);
 
