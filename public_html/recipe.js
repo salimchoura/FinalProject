@@ -108,11 +108,11 @@ for (let button of buttons)
 {
     button.onclick = (e) =>
     {
-        changeColor(e)
         let current = button.getElementsByTagName('img')[0];
         let numStars = parseInt(current.id);
         let stars = numStars + 1;
         addReview(stars);
+        changeColor(e);
     }
 }
 
@@ -152,10 +152,10 @@ function addReview(stars) {
         return response.text();
     }).then((text) =>{
         if(text == 'SUCCESSFULLY UPDATED REVIEW') {
-            // handle success
+            showReviews();
         }
         else {
-            // handle failure
+            alert(text);
         }
     }).catch((error) => {
         console.log('THERE WAS AN ERROR ADDING A REVIEW');
