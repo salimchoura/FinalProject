@@ -1,3 +1,30 @@
 ---RECIPES FOR TESTING PURPOSES--
 Feel free to add your own! These are basically test cases, just copy paste them in.
 Also, remember to add the images for them to the images folder.
+
+--------------------
+
+Title: Mac and Cheese Casserole
+Grams of Protein: 19.4
+Grams of Carbs: 94
+Grams of Fat: 32
+Instructions:
+1. In pot, fill water halfway, add 1 tsp. salt, cover, and turn heat to high.
+2. Bring to a boil. Add macaroni and cook about 8-10 minutes or until tender.
+3. Drain macaroni in a collander.
+4. In a large bowl, combine cheddar cheese, eggs, sour cream, butter, milk, salt, and pepper.
+5. Add cooked macaroni and mix thoroughly.
+6. Pour into casserole dish, sprinkle breadcrumbs and cover with foil. Bake at 350 degrees or until hot and bubbly.
+
+Ingredients:
+2 cups elbow macaroni -- SUBSITUTE: 2 cups rice-based elbow macaroni
+2 cups Cheddar cheese (grated) -- SUBSTITUTE: 2 cups vegan Cheddar cheese
+2 eggs, beaten -- SUBSTITUTE: you can omit this ingredient.
+1/2 cup sour cream -- SUBSTITUTE: none
+1/2 cup bread crumbs -- SUBSTITUTE: you can omit this ingredient.
+4 tablespoons butter, cut into pieces -- SUBSTITUTE: 4 tablespoons margarine
+1 cup milk -- SUBSTITUTE: 1 cup yogurt
+1 teaspoon salt -- SUBSTITUTE: none
+1/2 teaspoon pepper -- SUBSTITUTE: none
+
+--------------------
