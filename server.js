@@ -41,7 +41,7 @@ var Review = mongoose.model('Review', ReviewSchema);
 // schema for comments
 var CommentSchema = new Schema({
   date: Date,
-  user: { type : mongoose.Schema.Types.ObjectId, ref: 'User' },
+  user: String,
   text: String,
 });
 
@@ -379,7 +379,7 @@ app.post('/recipe/add/comment', (req, res) => {
       let currRecipe = foundRecipe[0];
       let newComment = new Comment({
         date: Date.now(),
-        user: currUser._id,
+        user: currUser.username,
         text: text,
       });
       currRecipe.comments.push(newComment._id);
@@ -628,7 +628,7 @@ app.post('/forum/add/comment', (req, res) => {
       let currForum = foundForum[0];
       let newComment = new Comment({
         date: Date.now(),
-        user: currUser._id,
+        user: currUser.username,
         text: text,
       });
       currForum.comments.push(newComment._id);
