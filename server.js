@@ -342,6 +342,18 @@ app.get('/get/reviews/:recipe', (req, res) => {
   let recipeID = req.params.recipe;
   let result = Review.find({recipe : recipeID}).exec();
   result.then((found) => {
+    let userIDs = [];
+    for(let review of found) {
+      userIDs.push(review.user);
+    }
+    let userFind = User.find({_id : {$in : userIDs}});
+    userFind.then((users) => {
+      let properReviews = [];
+      for(let currReview of found) {
+        let currUser = found.find(currUser => currUser._id == currReview.user);
+        // TODO
+      }
+    });
     res.end(JSON.stringify(found));
   });
   result.catch((error) => {
