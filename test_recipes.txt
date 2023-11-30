@@ -5,6 +5,7 @@ Also, remember to add the images for them to the images folder.
 --------------------
 
 Title: Mac and Cheese Casserole
+Image: mac_and_cheese_casserole.jpg
 Grams of Protein: 19.4
 Grams of Carbs: 94
 Grams of Fat: 32
