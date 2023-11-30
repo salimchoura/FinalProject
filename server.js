@@ -178,12 +178,15 @@ function createHashes(currSalt, text) {
   return hexVals;
 }
 
+// make sure user can't access page to add recipe unless logged in
+app.use('/addRecipe.html', authenticate);
+
 app.use(express.static('public_html'));
 
 app.listen(port, () => 
   console.log(`App listening at http://localhost:${port}`));
 
-// make sure users are logged in if they are to add recipes
+// make sure users are logged in if they are to add recipes - extra guard
 app.use('/add/recipe', authenticate);
 
 // should be changed to add/recipe/:USERNAME but currently testing
@@ -336,7 +339,7 @@ app.post('/make/review', (req, res) => {
   });
 });
 
-// make sure only logged in users are able to add comments
+// make sure only logged in users are able to add comments - extra guard
 app.use('/recipe/add/comment', authenticate);
 
 // route for adding comment to recipe
@@ -387,7 +390,7 @@ app.post('/recipe/add/comment', (req, res) => {
   })
 });
 
-// make sure users are logged in before they can edit their comments
+// make sure users are logged in before they can edit comments - extra guard
 app.use('/recipe/edit/comment', authenticate);
 
 // route for editing a comment on a recipe
@@ -463,7 +466,7 @@ app.get('/recipe/get/comments', (req, res) => {
   });
 });
 
-// make sure users are logged in before they can add a forum post
+// make sure users are logged in before they can add forum post - extra guard
 app.use('/add/forum', authenticate);
 
 // Route to add forum posts
@@ -520,7 +523,7 @@ app.post('/add/forum', (req, res) => {
   });
 });
 
-// make sure users are logged in before they edit posts
+// make sure users are logged in before they edit posts - extra guard
 app.use('/edit/forum', authenticate);
 
 // route for editing a forum post
@@ -585,7 +588,7 @@ app.get('/search/forum/:keyword', (req, res) => {
   });
 });
 
-// make sure users are logged in before commenting
+// make sure users are logged in before commenting - extra guard
 app.use('/forum/add/comment', authenticate);
 
 // route for adding comment to forum post
@@ -636,7 +639,7 @@ app.post('/forum/add/comment', (req, res) => {
   })
 });
 
-// make sure users are logged in before they edit their comments
+// make sure users are logged in before they edit comments - extra guard
 app.use('/forum/edit/comment', authenticate);
 
 // route for editing a comment on a forum
