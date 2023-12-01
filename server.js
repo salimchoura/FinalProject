@@ -55,8 +55,6 @@ var RecipeSchema = new Schema({
   image: String,
   ingredients: [{'regular' : String, 'substitute' : String}],
   reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review '}],
-  // uncommented this to work on comments
-  comments: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
   protein: Number,
   carbs: Number,
   fat: Number,
@@ -223,7 +221,6 @@ app.post('/add/recipe/:username', upload.single('photo'), (req, res) => {
     image: req.file.originalname,
     ingredients: JSON.parse(req.body.ingredients),
     reviews: [],
-    comments: [],
     instructions: req.body.instructions,
     protein: req.body.protein,
     carbs: req.body.carbs,
