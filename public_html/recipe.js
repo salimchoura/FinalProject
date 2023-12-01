@@ -102,15 +102,6 @@ const btn = document.querySelector("button");
 const post = document.querySelector(".post");
 const widget = document.querySelector(".star-widget");
 const editBtn = document.querySelector(".edit");
-btn.onclick = () => {
-    widget.style.display = "none";
-    post.style.display = "block";
-    editBtn.onclick = () => {
-        widget.style.display = "block";
-        post.style.display = "none";
-    }
-    return false;
-}
 
 
 
@@ -121,8 +112,11 @@ btn.onclick = () => {
  */
 function addReview(stars) {
     let user = window.sessionStorage.getItem('username');
+    let text = document.getElementById('feedback').value
+    console.log('text')
+    console.log('stars')
     let recipe = current._id;
-    let newReview = { username: user, numStars: stars, recipeID: recipe };
+    let newReview = { username: user, numStars: stars, recipeID: recipe, text: text };
     fetch('/make/review', {
         method: 'POST',
         body: JSON.stringify(newReview),
@@ -132,9 +126,16 @@ function addReview(stars) {
     }).then((text) => {
         if (text == 'SUCCESSFULLY UPDATED REVIEW') {
             showReviews();
+            widget.style.display = "none";
+            post.style.display = "block";
+            editBtn.onclick = () => {
+                widget.style.display = "block";
+                post.style.display = "none";
+            }
+            return false;
         }
         else {
-            alert(text);
+            alert('You need to be logged in to review and comment. Make sure your log in session has not expired');
         }
     }).catch((error) => {
         console.log('THERE WAS AN ERROR ADDING A REVIEW');
@@ -175,10 +176,15 @@ function showReviews() {
     })
 }
 
+var stars = 0
+
 let inputs = document.getElementsByTagName('input')
-for (let i =0;i<inputs.length;i++)
-{
+for (let i = 0; i < inputs.length; i++) {
     let input = inputs[i]
-    let stars = 6-(i+1)
-    input.onclick = () => {addReview(stars)}
+    input.onclick = () => { stars = 6 - (i + 1) }
+}
+
+
+btn.onclick = () => {
+    addReview(stars)
 }
