@@ -31,7 +31,7 @@ db.on('error', () => {
 var Schema = mongoose.Schema;
 
 var ReviewSchema = new Schema({
-  user: { type : mongoose.Schema.Types.ObjectId, ref: 'User' },
+  user: String,
   stars: Number,
   recipe: { type : mongoose.Schema.Types.ObjectId, ref: 'Recipe' },
 });
@@ -258,7 +258,7 @@ app.post('/make/review', (req, res) => {
     let userID = currUser._id;
     let answer = "";
     let reviewResult = Review.find({
-      user : userID,
+      user : name,
       recipe : recipeID,
     }).exec();  // find reviews made by that user for that recipe
     reviewResult.then((reviewFound) => {
@@ -268,7 +268,7 @@ app.post('/make/review', (req, res) => {
         recipeResult.then((recipeFound) => {
           let currRecipe = recipeFound[0];
           let newReview = new Review({
-            user: currUser._id,
+            user: name,
             stars: reviewStars,
             recipe: currRecipe,
           });
@@ -342,6 +342,8 @@ app.get('/get/reviews/:recipe', (req, res) => {
   let recipeID = req.params.recipe;
   let result = Review.find({recipe : recipeID}).exec();
   result.then((found) => {
+    res.end(JSON.stringify(found));
+    /*
     let userIDs = [];
     for(let review of found) {
       userIDs.push(review.user);
@@ -351,10 +353,18 @@ app.get('/get/reviews/:recipe', (req, res) => {
       let properReviews = [];
       for(let currReview of found) {
         let currUser = found.find(currUser => currUser._id == currReview.user);
-        // TODO
+        let betterReview = {
+          user : currUser.username,
+          stars : currReview.stars,
+          recipe : currReview.recipe
+        };
+        properReviews.push(betterReview);
       }
+      res.end(JSON.stringify(properReviews));
     });
-    res.end(JSON.stringify(found));
+    userFind.catch((error) => {
+      res.end('COULD NOT FIND USERS WHO MADE REVIEWS');
+    })*/
   });
   result.catch((error) => {
     res.end('COULD NOT FIND REVIEWS');
