@@ -21,7 +21,7 @@ function addUser() {
         return response.text();
     }).then((text) => {
         // alert the user of the result of their account creation attempt
-        console.log(text);
+        alert(text);
     });
     request.catch((error) => {
         console.log("ERROR IN CREATION OF ACCOUNT");

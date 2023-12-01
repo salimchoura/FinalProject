@@ -9,6 +9,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #fce4ec;
+    animation: fadeIn 1s ease-in-out;
   }
   
   h1 {
@@ -28,6 +29,7 @@ body {
   }
   
   input, textarea {
+    display: block;
     width: 40%;
     padding: 10px;
     box-sizing: border-box;
@@ -106,11 +108,16 @@ nav a,
     padding: 14px 16px;
     text-decoration: none;
     transition: background-color 0.3s;
+    text-shadow: none;
     margin-left: 30px;
 }
 
 #title {
     margin-top: 0px;
     font-size: 60px;
+}
+
+a{
+  font-size: 20px;
 }
   
