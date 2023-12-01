@@ -144,6 +144,9 @@ function addReview(stars) {
 
 /* 
  * Show the reviews on the recipe.
+ * 
+ * TODO: Change this so it shows the bar chart of reviews instead of each
+ * individual review. (Note: this method also needs to be called on window load)
  */
 function showReviews() {
     let id = current._id;
