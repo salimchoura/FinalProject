@@ -245,8 +245,11 @@ app.post('/add/recipe/:username', upload.single('photo'), (req, res) => {
 app.get('/search/recipes/:KEYWORD', (req, res) => {
   // get the search keyword from the request parameters
   const keyword = req.params.KEYWORD;
-  const p = Recipe.find({}).exec();
+  //const p = Recipe.find({}).exec();
+  const p = Recipe.find({title : {$regex : keyword, $options : "i"}});
   p.then((recipes) => {
+    res.end(JSON.stringify(recipes));
+    /*
     const neededRecipes = [];
     for (let recipe of recipes) {
       // filter users whose username contains the given keyword
@@ -255,7 +258,7 @@ app.get('/search/recipes/:KEYWORD', (req, res) => {
       }
     }
     // return the matching items
-    res.end(JSON.stringify(neededRecipes));
+    res.end(JSON.stringify(neededRecipes));*/
   })
     .catch((error) => {
       console.log('error getting items from db', error)
@@ -614,7 +617,7 @@ app.post('/edit/forum', (req, res) => {
 // out potentially helpful results)
 app.get('/search/forum/:keyword', (req, res) => {
   let word = req.params.keyword;
-  let result = ForumPost.find({text : {$regex : word}}).exec();
+  let result = ForumPost.find({text : {$regex : word, $options : "i"}}).exec();
   result.then((found) => {
     res.end(JSON.stringify(found, null, 4));
   });
