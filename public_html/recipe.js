@@ -12,6 +12,7 @@ let ingredients = current['ingredients']
 
 console.log(current)
 let html = `
+<h1>${current['title']}</h1>
 <img src="../images/${current['image']}"><br>`
 html += '<br><h2>Ingredients:</h2><br>'
 html += '<ul>'
