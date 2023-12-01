@@ -19,7 +19,7 @@ html += '<ul>'
 for (let ingredient of ingredients) {
     html += `<li>-${ingredient['regular']}`
     if (ingredient['substitute'] != "")
-        html += `can be substituted with ${ingredient['substitute']}`
+        html += ` (substitute: ${ingredient['substitute']})`
     html += '</li>'
 }
 html += '</ul><br>'
