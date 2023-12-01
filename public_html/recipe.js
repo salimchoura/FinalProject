@@ -11,24 +11,25 @@ let ingredients = current['ingredients']
 //instructions: String
 
 console.log(current)
-let html = `<span>Title ${current['title']}</span><br>
+let html = `
 <img src="../images/${current['image']}"><br>`
-html +='<ul>'
-for (let ingredient of ingredients)
-{
-    html += `<li>${ingredient['regular']}`
+html += '<br><h2>Ingredients:</h2><br>'
+html += '<ul>'
+for (let ingredient of ingredients) {
+    html += `<li>-${ingredient['regular']}`
     if (ingredient['substitute'] != "")
         html += `can be substituted with ${ingredient['substitute']}`
     html += '</li>'
 }
-html+='</ul>'
-html+=`${current['instructions']}`
+html += '</ul><br>'
+html += '<h2>Instructions:</h2><br>'
+html += `${current['instructions']}<br>`
 
-document.getElementById('recipeBlock').innerHTML = ''
-document.getElementById('recipeBlock').innerHTML += html
+document.getElementById('recipe').innerHTML = ''
+document.getElementById('recipe').innerHTML += html
 
-const data = [carbs,fat,protein];
-let labels = ['carbs','fat','protein'];
+const data = [carbs, fat, protein];
+let labels = ['carbs', 'fat', 'protein'];
 
 // Set up the dimensions for the pie chart
 const width = 400;
@@ -47,7 +48,7 @@ const arc = d3.arc()
     .outerRadius(radius);
 
 // Create an SVG element and append it to the container
-const svg = d3.select("#recipeBlock")
+const svg = d3.select("#recipe")
     .append("svg")
     .attr("width", width)
     .attr("height", height)
@@ -74,7 +75,7 @@ svg.selectAll("text")
     .style("font-size", "14px");
 
 // Create the legend
-const legend = d3.select("#recipeBlock")
+const legend = d3.select("#recipe")
     .append("svg")
     .attr("width", 200)
     .attr("height", 200)
@@ -96,46 +97,24 @@ legend.append("text")
     .style("text-anchor", "start")
     .text((d, i) => data[i] + 'g of ' + labels[i]);
 
-document.getElementById('recipeBlock').innerHTML += "<button><img id=0 class='stars' src='star.png'></button>"
-document.getElementById('recipeBlock').innerHTML += "<button><img id=1 class='stars' src='star.png'></button>"
-document.getElementById('recipeBlock').innerHTML += "<button><img id=2 class='stars' src='star.png'></button>"
-document.getElementById('recipeBlock').innerHTML += "<button><img id=3 class='stars' src='star.png'></button>"
-document.getElementById('recipeBlock').innerHTML += "<button><img id=4 class='stars' src='star.png'></button>"
 
-
-let buttons = document.getElementsByTagName('button')
-for (let button of buttons)
-{
-    button.onclick = (e) =>
-    {
-        let current = button.getElementsByTagName('img')[0];
-        let numStars = parseInt(current.id);
-        let stars = numStars + 1;
-        addReview(stars);
-        changeColor(e);
+const btn = document.querySelector("button");
+const post = document.querySelector(".post");
+const widget = document.querySelector(".star-widget");
+const editBtn = document.querySelector(".edit");
+btn.onclick = () => {
+    widget.style.display = "none";
+    post.style.display = "block";
+    editBtn.onclick = () => {
+        widget.style.display = "block";
+        post.style.display = "none";
     }
+    return false;
 }
 
-function changeColor(event)
-{
-    let max = event.srcElement.id
-    console.log(max)
-    let buttons = document.getElementsByTagName('button')
-    for (let i=0;i < buttons.length;i++)
-    {
-        buttons[i].style.backgroundColor = '#e7e7e7'
-    }
-
-    for (let i=0;i < buttons.length;i++)
-    {
-        if (i <= max)
-        {
-            buttons[i].style.backgroundColor = 'red'
-        }
-    }
 
 
-}
+
 
 /**
  * Adds a review to the current recipe.
@@ -143,15 +122,15 @@ function changeColor(event)
 function addReview(stars) {
     let user = window.sessionStorage.getItem('username');
     let recipe = current._id;
-    let newReview = {username : user, numStars : stars, recipeID : recipe};
+    let newReview = { username: user, numStars: stars, recipeID: recipe };
     fetch('/make/review', {
         method: 'POST',
         body: JSON.stringify(newReview),
-        headers: {'Content-Type' : 'application/json'}
+        headers: { 'Content-Type': 'application/json' }
     }).then((response) => {
         return response.text();
-    }).then((text) =>{
-        if(text == 'SUCCESSFULLY UPDATED REVIEW') {
+    }).then((text) => {
+        if (text == 'SUCCESSFULLY UPDATED REVIEW') {
             showReviews();
         }
         else {
@@ -168,27 +147,35 @@ function addReview(stars) {
  */
 function showReviews() {
     let id = current._id;
-    let query = {recipe : id};
+    let query = { recipe: id };
     let url = '/get/reviews/' + id;
     let result = fetch(url);
     result.then((response) => {
         return response.text();
     }).then((text) => {
-        if(text == 'COULD NOT FIND REVIEWS') {
+        if (text == 'COULD NOT FIND REVIEWS') {
             document.getElementById('recipeBlock').innerHTML += '<p>Could not load reviews.</p>';
         }
         else {
             let reviews = JSON.parse(text);
             // put the reviews into HTML
-            for(let review of reviews) {
+            for (let review of reviews) {
                 // add each review to the DOM
                 document.getElementById('recipeBlock').innerHTML += '<h3>' + review.user + '<h3>';
                 let numStars = review.stars;
                 // add each star for the user
-                for(let i = 0; i < numStars; i++) {
+                for (let i = 0; i < numStars; i++) {
                     document.getElementById('recipeBlock').innerHTML += "<img class='reviewStars' src='star.png'>";
                 }
             }
         }
     })
+}
+
+let inputs = document.getElementsByTagName('input')
+for (let i =0;i<inputs.length;i++)
+{
+    let input = inputs[i]
+    let stars = 6-(i+1)
+    input.onclick = () => {addReview(stars)}
 }

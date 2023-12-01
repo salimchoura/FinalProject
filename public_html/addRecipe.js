@@ -72,5 +72,6 @@ function addRecipe() {
     p.catch(() => {
         console.log('something went wrong while requesting posting an item');
     })
+
 }
 
