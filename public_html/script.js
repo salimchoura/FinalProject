@@ -22,6 +22,8 @@ function addUser() {
     }).then((text) => {
         // alert the user of the result of their account creation attempt
         alert(text);
+        document.getElementById('username').value = "";
+        document.getElementById('password').value = "";
     });
     request.catch((error) => {
         console.log("ERROR IN CREATION OF ACCOUNT");
