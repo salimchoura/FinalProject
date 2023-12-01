@@ -34,6 +34,7 @@ var ReviewSchema = new Schema({
   user: String,
   stars: Number,
   recipe: { type : mongoose.Schema.Types.ObjectId, ref: 'Recipe' },
+  text: String,
 });
 
 var Review = mongoose.model('Review', ReviewSchema);
@@ -186,6 +187,27 @@ app.use(express.static('public_html'));
 app.listen(port, () => 
   console.log(`App listening at http://localhost:${port}`));
 
+// route to make sure user is logged in (without redirecting)
+// used to determine if user can write comments
+app.get('/check/user', (req, res) => {
+  let c = req.cookies;
+  if(c != undefined && c.login != undefined) {
+    if(sessions[c.login.username] != undefined) {
+      if(sessions[c.login.username].id == c.login.sessionID) {
+        res.end('1');
+      }
+      else {
+        res.end('0');
+      }
+    }
+    else {
+      res.end('0');
+    }
+  }
+  else {
+      res.end('0');
+  }
+});
 // make sure users are logged in if they are to add recipes - extra guard
 app.use('/add/recipe/*', authenticate);
 
@@ -251,11 +273,11 @@ app.post('/make/review', (req, res) => {
   let data = req.body;
   let name = data.username;
   let reviewStars = data.numStars;
+  let reviewText = data.text;
   let recipeID = data.recipeID;
   let result = User.find({username : name}).exec();
   result.then((found) => {
     let currUser = found[0];
-    let userID = currUser._id;
     let answer = "";
     let reviewResult = Review.find({
       user : name,
@@ -271,6 +293,7 @@ app.post('/make/review', (req, res) => {
             user: name,
             stars: reviewStars,
             recipe: currRecipe,
+            text: reviewText,
           });
           currRecipe.reviews.push(newReview._id);
           currUser.reviews.push(newReview._id);
@@ -305,6 +328,7 @@ app.post('/make/review', (req, res) => {
             res.end('YOU DO NOT HAVE PERMISSION TO EDIT THIS REVIEW');
           }
           currReview.stars = reviewStars;
+          currReview.text = reviewText;
           let resaveRecipe = currRecipe.save();
           resaveRecipe.then((saveResult) => {});
           resaveRecipe.catch((error) => {
@@ -343,38 +367,19 @@ app.get('/get/reviews/:recipe', (req, res) => {
   let result = Review.find({recipe : recipeID}).exec();
   result.then((found) => {
     res.end(JSON.stringify(found));
-    /*
-    let userIDs = [];
-    for(let review of found) {
-      userIDs.push(review.user);
-    }
-    let userFind = User.find({_id : {$in : userIDs}});
-    userFind.then((users) => {
-      let properReviews = [];
-      for(let currReview of found) {
-        let currUser = found.find(currUser => currUser._id == currReview.user);
-        let betterReview = {
-          user : currUser.username,
-          stars : currReview.stars,
-          recipe : currReview.recipe
-        };
-        properReviews.push(betterReview);
-      }
-      res.end(JSON.stringify(properReviews));
-    });
-    userFind.catch((error) => {
-      res.end('COULD NOT FIND USERS WHO MADE REVIEWS');
-    })*/
   });
   result.catch((error) => {
     res.end('COULD NOT FIND REVIEWS');
   });
 });
 
+// --- REMOVING ALL ROUTES THAT HAVE TO DO WITH COMMENTS ON RECIPES SINCE WE'RE FUSING COMMENTS AND REVIEWS ---
+
 // make sure only logged in users are able to add comments - extra guard
-app.use('/recipe/add/comment', authenticate);
+//app.use('/recipe/add/comment', authenticate);
 
 // route for adding comment to recipe
+/*
 app.post('/recipe/add/comment', (req, res) => {
   let data = req.body;
   let name = data.username;
@@ -497,6 +502,7 @@ app.get('/recipe/get/comments/:recipe', (req, res) => {
     res.end('COULD NOT FIND RECIPE TO GET COMMENTS');
   });
 });
+*/
 
 // make sure users are logged in before they can add forum post - extra guard
 app.use('/add/forum', authenticate);
