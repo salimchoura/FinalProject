@@ -255,3 +255,7 @@ nav a,
     margin-top: 0px;
     font-size: 60px;
 }
+
+a {
+  font-size: 20px;
+}
