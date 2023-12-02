@@ -18,7 +18,7 @@ document.getElementById('post').onclick = addRecipe
 function addRecipe() {
     // Get the values of the item inputs
     console.log('clicked')
-    const title = document.getElementById('title').value.trimEnd();
+    const title = document.getElementById('name').value.trimEnd();
     const instructions = document.getElementById('ins').value.trimEnd();
     const image = document.getElementById('image').files[0];
     image.filename = image.originalname
