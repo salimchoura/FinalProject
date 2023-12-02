@@ -98,6 +98,7 @@ legend.append("text")
     .style("text-anchor", "start")
     .text((d, i) => data[i] + 'g of ' + labels[i]);
 
+document.getElementById('recipe').innerHTML += '<h2>Reviews Statistics</h2>'
 
 const btn = document.querySelector("button");
 const post = document.querySelector(".post");
@@ -162,8 +163,7 @@ function showReviews() {
             document.getElementById('recipe').innerHTML += '<p>Could not load reviews.</p>';
         }
         else {
-            let reviews = JSON.parse(text);
-            document.getElementById('recipe').innerHTML += '<h2>Reviews Statistics</h2>'
+            let reviews = JSON.parse(text);            
             makeBarChart(reviews)
             document.getElementById('comments').innerHTML = ''
             // put the reviews into HTML
@@ -211,9 +211,14 @@ function makeBarChart(reviews) {
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
-
+    let barchart = d3.select('.barChart')
+    if (barchart != undefined)
+    {
+        barchart.remove()
+    }
     const svg = d3.select("#recipe")
     .append("svg")
+    .attr('class', 'barChart')
     .attr("width", width)
     .attr("height", height)
 
