@@ -137,7 +137,7 @@ function authenticate(req, res, next) {
   if(c != undefined && c.login != undefined) {
     if(sessions[c.login.username] != undefined) {
       if(sessions[c.login.username].id == c.login.sessionID) {
-        next(); // might need to change
+        next();
       }
       else {
         res.redirect('/index.html');  // might change this depending
@@ -148,7 +148,7 @@ function authenticate(req, res, next) {
     }
   }
   else {
-      res.redirect('/index.html');
+    res.redirect('/index.html');
   }
 }
 
