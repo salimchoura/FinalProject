@@ -1,3 +1,14 @@
+/*
+ * Nilufer Demirbas, Salim Choura, Yanxihao Chen, and Adrianna Koppes
+ * This file contains all the code necessary for setting up a page to display
+ * one recipe. The recipe to display was specified by the user when they
+ * clicked on a search result on the Explore Recipes page. Users can see the
+ * recipe, an associated image, a pie chart showing the percentage of carbs,
+ * protein, and fat, and information about the reviews.
+ * 
+ * File Authors: Salim Choura and Adrianna Koppes
+ */
+
 console.log(window.localStorage.getItem('current'))
 let current = JSON.parse(window.localStorage.getItem('current'))
 
@@ -110,7 +121,16 @@ showReviews()
 
 
 /**
- * Adds a review to the current recipe.
+ * Adds a review to the current recipe. Takes user input, including the
+ * number of stars left and the text review, as well as the information about
+ * the content and the user, and sends it to the server to be input into
+ * the database. Then, if the input is successful, then the client requests
+ * to get all of the reviews from the server to display, updating the 
+ * graphics to display the new review as well.
+ * 
+ * Authors: Adrianna Koppes, Salim Choura
+ * 
+ * @param stars Number representing the number of stars given in the review
  */
 function addReview(stars) {
     let user = window.sessionStorage.getItem('username');
@@ -128,6 +148,7 @@ function addReview(stars) {
     }).then((text) => {
         if (text == 'SUCCESSFULLY UPDATED REVIEW') {
             showReviews();
+            // change the star review widget to show the option to edit
             widget.style.display = "none";
             post.style.display = "block";
             editBtn.onclick = () => {
@@ -146,10 +167,13 @@ function addReview(stars) {
 }
 
 /* 
- * Show the reviews on the recipe.
+ * Show the reviews on the recipe. Gets the reviews from the server, and then
+ * adds all of the reviews to the page. It also sends the relevant information
+ * to be added to the bar chart of reviews. The text portion of the reviews
+ * and the bar chart showing all the different ratings that have been given 
+ * and their distribution are shown separately.
  * 
- * TODO: Change this so it shows the bar chart of reviews instead of each
- * individual review. (Note: this method also needs to be called on window load)
+ * Authors: Adrianna Koppes, Salim Choura
  */
 function showReviews() {
     let id = current._id;
