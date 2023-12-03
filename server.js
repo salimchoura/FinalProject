@@ -1,3 +1,15 @@
+/*
+ * Nilufer Demirbas, Salim Choura, Yanxihao Chen, and Adrianna Koppes
+ * This file contains the backend server, which provides functionality
+ * for the website. It contains connections to a database (allowing
+ * content and user data to be saved), as well as routes to perform
+ * every kind of operation needed for the website.
+ * 
+ * File Authors: Nilufer Demirbas, Salim Choura, and Adrianna Koppes
+ * 
+ * Setup code written by Nilufer Demirbas
+ */
+
 const mongoose = require('mongoose');
 const express = require('express');
 const parser = require('body-parser');
@@ -8,6 +20,7 @@ const multer = require('multer');
 
 
 
+// allows storage of images
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
       cb(null, './public_html/images');
@@ -30,6 +43,15 @@ db.on('error', () => {
 
 var Schema = mongoose.Schema;
 
+/*
+ * Below are the various schemas for the different types of data
+ * that we are storing in the database: one for each type of content,
+ * and one for the users.
+ * 
+ * Author: Adrianna Koppes
+ */
+
+// schema for reviews
 var ReviewSchema = new Schema({
   user: String,
   stars: Number,
@@ -88,9 +110,15 @@ var User = mongoose.model('User', UserSchema);
 
 let sessions = {};
 
-/*
+/**
  * This function adds the new user's session to the object that tracks
- * all of the current user sessions.
+ * all of the current user sessions. This allows us to keep track of the
+ * users who are logged in.
+ * 
+ * @param username String representing the name of the user for whom to
+ *                 add a session
+ * 
+ * Author: Adrianna Koppes
  */
 function addSession(username) {
   let sid = Math.floor(Math.random() * 100000000000);
@@ -99,9 +127,12 @@ function addSession(username) {
   return sid;
 }
 
-/*
+/**
  * This function removes all the expired sessions from the sessions 
- * tracker so those users are no longer logged in.
+ * tracker so those users are no longer logged in. This allows us to log
+ * users out automatically after a certain amount of time for security.
+ * 
+ * Author: Adrianna Koppes
  */ 
 function removeSession() {
   let sessLength = 60000 * 10;    // session length is 10 mins for testing
@@ -125,12 +156,18 @@ app.use(cookieParser());
 app.use(parser.json());
 app.use(parser.urlencoded({ extended: true, limit: '10mb' }));
 
-/*
+/**
  * This function authenticates users trying to access the user-only pages of 
  * the application. If the user has access (which the website can tell via
  * the cookies from the user), then it will allow the users to access the
  * page. If the user does not have access, they will be redirected to the
  * login screen.
+ * 
+ * @param req The request that was sent to the server by the client.
+ * @param res The response that the server will send back.
+ * @param next The route to move to next if the user is logged in.
+ * 
+ * Author: Adrianna Koppes
  */
 function authenticate(req, res, next) {
   let c = req.cookies;
@@ -140,7 +177,7 @@ function authenticate(req, res, next) {
         next();
       }
       else {
-        res.redirect('/index.html');  // might change this depending
+        res.redirect('/index.html');
       }
     }
     else {
@@ -152,9 +189,11 @@ function authenticate(req, res, next) {
   }
 }
 
-/*
+/**
  * This function generates a 4-digit salt to add onto the end of a user's
  * password.
+ * 
+ * Author: Adrianna Koppes
  */
 function makeSalt() {
   let num1 = "" + (Math.random() * 10);
@@ -165,9 +204,14 @@ function makeSalt() {
   return totalSalt;
 }
 
-/*
+/**
  * This function turns passwords (and salts) into the hashed versions
  * of themselves for storage and comparison to the stored password.
+ * 
+ * @param currSalt String representing the salt to use
+ * @param text String representing the text to encrypt
+ * 
+ * Author: Adrianna Koppes
  */
 function createHashes(currSalt, text) {
   let toHash = text + currSalt;
@@ -180,13 +224,23 @@ function createHashes(currSalt, text) {
 // make sure user can't access page to add recipe unless logged in
 app.use('/addRecipe.html', authenticate);
 
+// user can't access page to add forum post unless logged in
+app.use('/makeForumPost.html', authenticate);
+
+// serve static files
 app.use(express.static('public_html'));
 
 app.listen(port, () => 
   console.log(`App listening at http://localhost:${port}`));
 
-// route to make sure user is logged in (without redirecting)
-// used to determine if user can write comments
+/*
+ * Route used to make sure the user is logged in (without redirecting);
+ * used to determine if the user can write comments.
+ * Takes parameters req, the request sent by the client, and res, the
+ * response that the server will give.
+ * 
+ * Author: Adrianna Koppes
+ */
 app.get('/check/user', (req, res) => {
   let c = req.cookies;
   if(c != undefined && c.login != undefined) {
@@ -206,10 +260,18 @@ app.get('/check/user', (req, res) => {
       res.end('0');
   }
 });
+
 // make sure users are logged in if they are to add recipes - extra guard
 app.use('/add/recipe/*', authenticate);
 
-// should be changed to add/recipe/:USERNAME but currently testing
+/**
+ * Route used to add a recipe to the database and associate it with a
+ * certain user. Also adds a photo.
+ * Takes parameters req, the request sent by the client, and res, the
+ * response that the server will give.
+ * 
+ * Author: Salim Choura
+ */
 app.post('/add/recipe/:username', upload.single('photo'), (req, res) => {
 
   // get the username from the request parameters
@@ -242,6 +304,15 @@ app.post('/add/recipe/:username', upload.single('photo'), (req, res) => {
     .catch((error) => { console.log('could not add item to user listing', error) })
 })
 
+/**
+ * Route used to search recipes by keyword in the title. Search is case
+ * insensitive. Used to generate search results when a user is on
+ * the Explore Recipes page.
+ * Takes parameters req, the request sent by the client, and res, the
+ * response that the server will give.
+ * 
+ * Author: Salim Choura, with some fixes made by Adrianna Koppes
+ */
 app.get('/search/recipes/:KEYWORD', (req, res) => {
   // get the search keyword from the request parameters
   const keyword = req.params.KEYWORD;
@@ -249,16 +320,6 @@ app.get('/search/recipes/:KEYWORD', (req, res) => {
   const p = Recipe.find({title : {$regex : keyword, $options : "i"}});
   p.then((recipes) => {
     res.end(JSON.stringify(recipes));
-    /*
-    const neededRecipes = [];
-    for (let recipe of recipes) {
-      // filter users whose username contains the given keyword
-      if (recipe.title.includes(keyword)) {
-        neededRecipes.push(recipe);
-      }
-    }
-    // return the matching items
-    res.end(JSON.stringify(neededRecipes));*/
   })
     .catch((error) => {
       console.log('error getting items from db', error)
@@ -268,7 +329,14 @@ app.get('/search/recipes/:KEYWORD', (req, res) => {
 // make sure users are logged in before they review
 app.use('/make/review', authenticate);
 
-// route for making reviews
+/**
+ * Route for adding reviews or, if the user already added a review on
+ * the given recipe, editing a review that was previously made.
+ * Takes parameters req, the request sent by the client, and res, the
+ * response that the server will give.
+ * 
+ * Author: Adrianna Koppes
+ */
 app.post('/make/review', (req, res) => {
   let data = req.body;
   let name = data.username;
@@ -361,7 +429,14 @@ app.post('/make/review', (req, res) => {
   });
 });
 
-// route to get all the reviews on a specific recipe
+/**
+ * Route to get all the reviews on a specific recipe, which is found using its
+ * ObjectId, since multiple recipes can have the same title.
+ * Takes parameters req, the request sent by the client, and res, the
+ * response that the server will give.
+ * 
+ * Author: Adrianna Koppes
+ */
 app.get('/get/reviews/:recipe', (req, res) => {
   let recipeID = req.params.recipe;
   let result = Review.find({recipe : recipeID}).exec();
@@ -507,7 +582,6 @@ app.get('/recipe/get/comments/:recipe', (req, res) => {
 // make sure users are logged in before they can add forum post - extra guard
 app.use('/add/forum', authenticate);
 
-// Route to add forum posts
 // Expected JSON object has the following parameters:
 // username: username of the user making the post
 // title: title of the post
@@ -517,6 +591,15 @@ app.use('/add/forum', authenticate);
 // well (which is why I put it as a string, so wecould easily change the names
 // or add new ones easily; if we wanted to stick to just two possible options
 // we could make buttons or radio buttons on the client side).
+/**
+ * Route to add forum posts, by the username, title, content, and tag of the
+ * post. Adds the new post to the database and then confirms that this action
+ * was done.
+ * Takes parameters req, the request sent by the client, and res, the
+ * response that the server will give.
+ * 
+ * Author: Adrianna Koppes
+ */
 app.post('/add/forum', (req, res) => {
   let data = req.body;
   let name = data.username;
@@ -564,12 +647,20 @@ app.post('/add/forum', (req, res) => {
 // make sure users are logged in before they edit posts - extra guard
 app.use('/edit/forum', authenticate);
 
-// route for editing a forum post
 // expects a JSON object in the body of the request with the parameters:
 // username: the username of the user who made/wants to edit the post
 // forumID: the ObjectId of the Forum Post to edit
 // title: the updated title of the post
 // content: the updated text of the post
+/**
+ * Route for editing an existing forum post. Requires a username, an ObjectId
+ * associated with the correct forum post, and potentially a new title or 
+ * new text content that replaces the old ones.
+ * Takes parameters req, the request sent by the client, and res, the
+ * response that the server will give.
+ * 
+ * Author: Adrianna Koppes
+ */
 app.post('/edit/forum', (req, res) => {
   let data = req.body;
   let user = data.username;
@@ -612,9 +703,16 @@ app.post('/edit/forum', (req, res) => {
   });
 });
 
-// Search for forum posts by keyword. Note that the keyword search is
-// for the entire forum post text, not the title (so we don't leave
-// out potentially helpful results)
+/**
+ * Route to search for forum posts by keyword and then return the result.
+ * The keyword search is performed on the forum post text, rather than the
+ * title, so results that are relevant but have an oddly worded title do
+ * not get omitted. Search is case insensitive.
+ * Takes parameters req, the request sent by the client, and res, the
+ * response that the server will give.
+ * 
+ * Author: Adrianna Koppes
+ */
 app.get('/search/forum/:keyword', (req, res) => {
   let word = req.params.keyword;
   let result = ForumPost.find({text : {$regex : word, $options : "i"}}).exec();
@@ -629,7 +727,16 @@ app.get('/search/forum/:keyword', (req, res) => {
 // make sure users are logged in before commenting - extra guard
 app.use('/forum/add/comment', authenticate);
 
-// route for adding comment to forum post
+/**
+ * Route for adding a comment to a forum post. Requires the client to
+ * specify a username, some text for the comment, and an ObjectId for
+ * the forum post in question so it is clear where to add the new
+ * comment.
+ * Takes parameters req, the request sent by the client, and res, the
+ * response that the server will give.
+ * 
+ * Author: Adrianna Koppes
+ */
 app.post('/forum/add/comment', (req, res) => {
   let data = req.body;
   let name = data.username;
@@ -680,7 +787,17 @@ app.post('/forum/add/comment', (req, res) => {
 // make sure users are logged in before they edit comments - extra guard
 app.use('/forum/edit/comment', authenticate);
 
-// route for editing a comment on a forum
+/**
+ * Route for editing an existing comment on a forum post. Requires the
+ * client to specify a username, some new content for the comment, 
+ * and ObjectIds for the forum post that the comment was on and the 
+ * comment itself, so we can identify the comment and associate it
+ * with the correct forum post.
+ * Takes parameters req, the request sent by the client, and res, the
+ * response that the server will give.
+ * 
+ * Author: Adrianna Koppes
+ */
 app.post('/forum/edit/comment', (req, res) => {
   let data = req.body;
   let name = data.username;
@@ -734,7 +851,16 @@ app.post('/forum/edit/comment', (req, res) => {
   });
 });
 
-// Route for getting all the comments on a single forum post
+/**
+ * Route to get all the comments on a single forum post. This is
+ * necessary for displaying forum posts on their own page. 
+ * Takes parameters req, the request sent by the client, and res, the
+ * response that the server will give. The "forum" parameter is
+ * the ObjectId of the forum post we are trying to get all of the
+ * comments for.
+ * 
+ * Author: Adrianna Koppes
+ */
 app.get('/forum/get/comments/:forum', (req, res) => {
   let forumID = req.params.forum;
   let searched = ForumPost.find({_id : forumID}).exec();
@@ -753,7 +879,14 @@ app.get('/forum/get/comments/:forum', (req, res) => {
   });
 });
 
-// path for creating account
+/**
+ * Route for allowing users to create their own accounts. Duplicate 
+ * usernames are not allowed.
+ * Takes parameters req, the request sent by the client, and res, the
+ * response that the server will give.
+ * 
+ * Author: Adrianna Koppes
+ */
 app.post('/add/user', (req, res) => {
   let userData = req.body;
   let name = userData.username;
@@ -786,7 +919,15 @@ app.post('/add/user', (req, res) => {
   });
 });
 
-// path for logging in
+/**
+ * Route for logging into one's account. The entered username is checked to
+ * see if there is a match. If there is, then continue to sald and hash
+ * it and compare to make sure the password is correct.
+ * Takes parameters req, the request sent by the client, and res, the
+ * response that the server will give.
+ * 
+ * Author: Adrianna Koppes
+ */
 app.post('/login/user', (req, res) => {
   let userData = req.body;
   let possUser = new User({
