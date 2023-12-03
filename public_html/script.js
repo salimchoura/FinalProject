@@ -1,4 +1,25 @@
-// the functions we will be adding
+/*
+ * Nilufer Demirbas, Salim Choura, Yanxihao Chen, and Adrianna Koppes
+ * This file contains the functions for creating a new user account and 
+ * logging in a new user. They communicate with our server (see server.js)
+ * and then perform intuitive actions as a result. The function to add a
+ * user alerts the user if their account creation is successful, and 
+ * logs an error in the console if it is not. The function to log in a
+ * user will alert the user if the login was unsuccessful, and redirect
+ * the user to the home page if the login was successful. These functions
+ * allow the core functionality of adding content to the website, since
+ * users cannot post content if they are not logged in.
+ */
+
+/*
+ * addUser() creates a new user account with the given username and 
+ * password. It communicates with the server to ensure that the user has
+ * not already been created, and also ensures that the user is saved
+ * to the database on the server side. When the user account is created,
+ * success will be indicated by the use of an alert.
+ * 
+ * Author: Nilufer Demirbas
+ */
 function addUser() {
 
     // take from text input
@@ -31,7 +52,16 @@ function addUser() {
     });
 }
 
-// needs password matching with hash and salt
+/**
+ * logInUser() logs a user in by communicating with the server. It also
+ * collects a cookie that travels with the user throughout their time on the
+ * website to ensure that the user remains logged in. If the user's login
+ * is successful, they are redirected to the home page. If the user's login
+ * failed, then they are alerted of the failure through a warning label
+ * below the login text areas.
+ * 
+ * Author: Nilufer Demirbas
+ */
 function logInUser() {
     // take from text input
     let user = document.getElementById('logUser').value;
@@ -59,7 +89,7 @@ function logInUser() {
         }
         else {
             // could not log in
-            document.getElementById("warning").innerHTML = text;
+            document.getElementById('warning').innerHTML = text;
         }
     });
     request.catch((error) => {

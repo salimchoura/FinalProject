@@ -1,3 +1,12 @@
+/*
+ * Nilufer Demirbas, Salim Choura, Yanxihao Chen, and Adrianna Koppes
+ * This file contains the CSS styling for the how to page. It specifies
+ * the fade-in effect, as well as the styling for the nav bar and the
+ * text on the page. The styling is consistent with the rest of the site.
+ * 
+ * File Author: Adrianna Koppes
+ */
+
 body {
 	background-color: whitesmoke;
     font-family: 'Arial', sans-serif;
