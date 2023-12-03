@@ -6,7 +6,7 @@
     <title>Food Social Media</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="makeForumPost.js"></script>
-    <link rel="stylesheet" href="makeForumPost..css">
+    <link rel="stylesheet" href="makeForumPost.css">
   </head>
 
   <body>
@@ -18,11 +18,26 @@
       <a href="howTo.html">Help</a>
       <a href="forum.html">Explore forum</a>
       <a href="explore_recipes.html">Explore recipes</a>
-    </nav><br><br><br><br><br>
+    </nav>
 
-
+    <h2>Make A Forum Post</h2>
+    
     <div id="content">
 
+        <img id="avocado" alt="avocado" src="./images/avocado.png">
+
+        <label for="imagePost">Image</label>
+        <input id="imagePost" type="file" name="photo" accept="image/*">
+
+        <br><br><br>
+
+        <label for="textPost">What Are You Cooking?</label>
+        <br>
+        <textarea id="textPost" rows="8" cols="30"></textarea>
+
+        <br><br>
+
+        <button id="makePost" onclick="">Create Post</button>
       
     </div>
     
