@@ -57,7 +57,8 @@ function addUser() {
  * collects a cookie that travels with the user throughout their time on the
  * website to ensure that the user remains logged in. If the user's login
  * is successful, they are redirected to the home page. If the user's login
- * failed, then they are alerted of the failure.
+ * failed, then they are alerted of the failure through a warning label
+ * below the login text areas.
  * 
  * Author: Nilufer Demirbas
  */
@@ -88,7 +89,7 @@ function logInUser() {
         }
         else {
             // could not log in
-            alert(text);
+            document.getElementById('warning').innerHTML = text;
         }
     });
     request.catch((error) => {
