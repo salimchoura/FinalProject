@@ -13,11 +13,38 @@ body {
 
 #searchForum{
     margin-left: 26vw;
+    margin-bottom: 3%;
     display: flex;
     border: 1px solid #ccc;
     border-radius: 4px;
     overflow: hidden;
     max-width: 600px;
+}
+
+.fPost{
+    border: 2px green solid;
+    color: green;
+    padding: 2%;
+    padding-bottom: 10%;
+    text-align: left;
+    position: relative;
+    z-index: 10;
+}
+
+.titleLink{
+    font-size: 30px;
+    font-weight: bolder;
+    color: green;
+    font-style:normal;
+}
+
+.titleLink:hover{
+    color:#68d16c;
+}
+
+h1{
+    font-size: 20px;
+    color:#4CAF50;
 }
 
 #tag{

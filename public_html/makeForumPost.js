@@ -11,9 +11,8 @@ function makeForumPost(){
 
     // gets the text and image inputs of the user from the post creation page
     let name = sessionStorage.getItem('username');
-    let postTitle = document.getElementById('postTitle').value.trimEnd();
-    let textPost = document.getElementById('textPost').value.trimEnd();
-    let imagePost = document.getElementById('imagePost').files[0];
+    let postTitle = document.getElementById('postTitle').value;
+    let postContent = document.getElementById('textPost').value.trimEnd();
     let postTag = null;
     if(document.getElementById("advice").checked){
         postTag = document.getElementById("advice").value;
@@ -44,8 +43,7 @@ function makeForumPost(){
     // body for the post
     newForumPost = { 'username': name,
                      'title': postTitle, 
-                     'image': imagePost, 
-                     'text': textPost, 
+                     'content': postContent, 
                      'tag': postTag };
 
     dataString = JSON.stringify(newForumPost);

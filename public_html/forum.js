@@ -20,27 +20,36 @@ window.onload = () =>{
 // then inserts it into the promise's url and searches for a 
 // post that includes that keyword, before adding it as a html
 // line into the forum page.
+
+var posts;
+
 function lookForPost(){
     console.log('looking for posts...');
     let keyword = document.getElementById('tag').value;
     fetch('/search/forum/' + keyword)
     .then((data) => { 
-        return data.json() })
-    .then((posts) => 
+        return data.text(); })
+    .then((text) => 
     {
+        posts = JSON.parse(text);
+        let forumPosts = document.getElementById('content');
+        forumPosts.innerHTML = '';
+
         let postString = '';
 
-        for (i in posts)
+        for (let element of posts)
         {
-            postString += '<div class="fPost">' + posts[i].username + '<br>' + 
-            posts[i].title + '<br>' + '</div>';
+            postString += `<div class="fPost"> <h1> username </h1> <a class='titleLink' onclick="goToPost();"> ${element['title']} </a> <br> </div>`;
+            forumPosts.innerHTML = postString;
         }
-
-        let forumPosts = document.getElementById('content');
-        forumPosts.innerHTML = postString;
-
-    }).catch((error) => {
-        console.log("COULD NOT GET SEARCH RESULTS");
-        console.log(error);
+        
     });
+}
+
+function goToPost(){
+    console.log('clicked');
+    document.getElementsByClassName('titleLink').onclick = () =>
+    {
+        window.location = 'post.html';
+    }
 }
