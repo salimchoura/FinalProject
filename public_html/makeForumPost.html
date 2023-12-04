@@ -41,18 +41,15 @@
 
         <br><br><br>
 
-        <input type="radio" name="option" id="advice">
-        <label for="advice" id="ad">advice</label>
-          
-        <input type="radio" name="option" id="question">
-        <label for="question" id="qu">question</label>
+        <div id="postTag">
+          <input type="radio" name="tag" id="advice" value="advice">
+          <label for="advice" id="ad">advice</label>
+            
+          <input type="radio" name="tag" id="question" value="question">
+          <label for="question" id="qu">question</label>
+        </div>
 
         <br><br><br>
-
-        <label for="tag">Add a Tag</label>
-        <input type="text" id="tag">
-
-        <br><br>
 
         <button id="makePost" onclick="makeForumPost();">Create Post</button>
       

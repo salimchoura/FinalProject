@@ -11,36 +11,34 @@ function makeForumPost(){
 
     console.log("Post Added!");
     // gets the text and image inputs of the user from the post creation page
-    const postTitle = document.getElementById('postTitle').value.trimEnd();
-    const textPost = document.getElementById('textPost').value.trimEnd();
-    const imagePost = document.getElementById('imagePost').files[0];
-    const tag = document.getElementById('tag').value.trimEnd();
+    let name = sessionStorage.getItem('username');
+    let postTitle = document.getElementById('postTitle').value.trimEnd();
+    let textPost = document.getElementById('textPost').value.trimEnd();
+    let imagePost = document.getElementById('imagePost').files[0];
+    let postTag = null;
+    if(document.getElementById("advice").checked){
+        postTag = document.getElementById("advice").value;
+    }else if(document.getElementById("question").checked){
+        postTag = document.getElementById("question").value;
+    }else{
+        console.log('MUST CHECK ONE');
+    }
     
-    // check to see if there is coherent posts submitted
-    console.log(postTitle);
-    console.log(textPost);
-    console.log(imagePost);
-    console.log(tag);
+    // body for the post
+    newForumPost = { 'username': name,
+                     'title': postTitle, 
+                     'image': imagePost, 
+                     'text': textPost, 
+                     'tag': postTag };
 
-    // forum post layout
-    const layout = new FormData();
-    layout.append('image', imagePost);
-    layout.append('title', postTitle);
-    layout.append('text', textPost);
-    layout.append('tag', tag);
-    console.log(layout);
+    dataString = JSON.stringify(newForumPost);
 
-    // get username with cookies
-    let data = decodeURIComponent(document.cookie)
-    let sliced = data.slice(8, data.length + 1)
-    let converted = JSON.parse(sliced)
-    let username = converted['username']
-    let url = '/add/forum/' + username;
+    let url = '/add/forum';
 
     // promise to get the user input for the forum post
     promise = fetch(url, {
         method: "POST",
-        body: layout,
+        body: dataString,
         'header': { 'Content-Type': 'application/json' }
     });
 

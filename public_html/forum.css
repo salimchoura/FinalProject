@@ -11,6 +11,32 @@ body {
 	padding: 0;
 }
 
+#searchForum{
+    margin-left: 26vw;
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+    max-width: 600px;
+}
+
+#tag{
+    flex: 1;
+    padding: 10px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+#searchButton{
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
 #makePost
 {
     background-color: #E1AD01;

@@ -31,6 +31,13 @@ label {
     margin-top: 10px;
 }
 
+#avocado{
+  width: 500 px;
+  position: fixed;
+  margin:0;
+  padding-left:850px;
+}
+
 #makePost {
   margin-top: 20px;
   padding: 10px 20px;
