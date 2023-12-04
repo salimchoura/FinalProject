@@ -21,7 +21,12 @@ window.onload = () =>{
 // post that includes that keyword, before adding it as a html
 // line into the forum page.
 
+// Additionally the "curr" variable, allows the user to click
+// on the post which will take them to a separate page where they 
+// can see the post that they clicked on itself with its content.
+
 var posts;
+var curr = 'empty';
 
 function lookForPost(){
     console.log('looking for posts...');
@@ -39,17 +44,26 @@ function lookForPost(){
 
         for (let element of posts)
         {
-            postString += `<div class="fPost"> <h1> ${element['username']} </h1> <a class='titleLink' onclick="goToPost();"> ${element['title']} </a> <br> </div>`;
+            postString += `<div class="fPost"> <h1> ${element['username']} </h1> <a class='titleLink' href="post.html"> ${element['title']} </a> <br> </div>`;
             forumPosts.innerHTML = postString;
         }
+
+        postListener();
         
     });
 }
 
-function goToPost(){
-    console.log('clicked');
-    document.getElementsByClassName('titleLink').onclick = () =>
+function postListener()
+{
+    let tags = document.getElementsByClassName('fPost')
+    for (let i=0;i<tags.length;i++)
     {
-        window.location = 'post.html';
+        tags[i].onclick = () => 
+        {
+            let stringified = JSON.stringify(posts[i]);
+            console.log(stringified);
+            window.localStorage.setItem('curr', stringified);
+            window.location = 'post.html';
+        }
     }
 }

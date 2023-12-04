@@ -1,0 +1,120 @@
+
+h1{
+    padding-top: 3%;
+    padding-left:7%;
+    text-align: left;
+    color:#347a36;
+    font-weight: bolder;
+    font-size:25px;
+}
+
+h2{
+    padding-left:7%;
+    text-align: left;
+    color:#4caf50;
+    font-weight: bolder;
+    font-size: 50px;
+}
+
+#postTag{
+    font-size:15px;
+}
+
+#postText{
+    margin-left:7%;
+    margin-right:7%;
+    color:#347a36;
+    padding: 1%;
+    border: solid 2px #347a36;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+@keyframes bounceIn {
+    from {
+        transform: scale(0.8);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#content{
+    font-family: 'Arial', sans-serif;
+}
+
+html,body{
+    margin:0;
+    height: 100%;
+    place-items: center;
+    text-align: center;
+    background: rgb(137, 247, 151);;
+}
+
+nav {
+    background-color: #4caf50;
+    overflow: hidden;
+    height: 100px;
+    font-family: 'Arial', sans-serif;
+}
+
+body
+{
+    text-align: left;
+    animation: fadeIn 1s ease-in-out;
+}
+
+nav a,
+#title {
+    margin-top: 30px;
+    float: left;
+    color: #fff;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    margin-left: 30px;
+}
+
+#title {
+    margin-top: 0px;
+    font-size: 60px;
+}
+
+a{
+  font-size: 20px;
+}
