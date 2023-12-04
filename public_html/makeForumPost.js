@@ -9,7 +9,6 @@
 
 function makeForumPost(){
 
-    console.log("Post Added!");
     // gets the text and image inputs of the user from the post creation page
     let name = sessionStorage.getItem('username');
     let postTitle = document.getElementById('postTitle').value.trimEnd();
@@ -23,6 +22,24 @@ function makeForumPost(){
     }else{
         console.log('MUST CHECK ONE');
     }
+
+    var httpRequest = new XMLHttpRequest();
+    if (!httpRequest) {
+        return false;
+    }
+
+    httpRequest.onreadystatechange = () => {
+        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+            if (httpRequest.status === 200) {
+                // for now, just log the response in the console
+                console.log(httpRequest.responseText);
+
+            } else { 
+                console.log('ERROR ADDING LISTING');
+            }
+        }
+    }
+
     
     // body for the post
     newForumPost = { 'username': name,
@@ -34,21 +51,9 @@ function makeForumPost(){
     dataString = JSON.stringify(newForumPost);
 
     let url = '/add/forum';
-
-    // promise to get the user input for the forum post
-    promise = fetch(url, {
-        method: "POST",
-        body: dataString,
-        'header': { 'Content-Type': 'application/json' }
-    });
-
-    // check if the POST request was succesful or failed
-    promise.then((data) => {
-        return data.text();})
-    .then((text) => {if (text =! undefined) { console.log(text) }})
-    .catch(() => {
-        console.log("MAKING FORUM POST FAILED");
-    });
+    httpRequest.open('POST', url);
+    httpRequest.setRequestHeader('Content-type', 'application/json');
+    httpRequest.send(dataString);
 
 }
 

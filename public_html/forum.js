@@ -39,5 +39,8 @@ function lookForPost(){
         let forumPosts = document.getElementById('content');
         forumPosts.innerHTML = postString;
 
+    }).catch((error) => {
+        console.log("COULD NOT GET SEARCH RESULTS");
+        console.log(error);
     });
 }
