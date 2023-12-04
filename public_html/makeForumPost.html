@@ -31,13 +31,30 @@
 
         <br><br><br>
 
-        <label for="textPost">What Are You Cooking?</label>
+        <label for="postTitle">Title</label>
+        <input type="text" id="postTitle">
+
         <br>
+
+        <label for="textPost">What Are You Cooking?</label>
         <textarea id="textPost" rows="8" cols="30"></textarea>
+
+        <br><br><br>
+
+        <input type="radio" name="option" id="advice">
+        <label for="advice" id="ad">advice</label>
+          
+        <input type="radio" name="option" id="question">
+        <label for="question" id="qu">question</label>
+
+        <br><br><br>
+
+        <label for="tag">Add a Tag</label>
+        <input type="text" id="tag">
 
         <br><br>
 
-        <button id="makePost" onclick="">Create Post</button>
+        <button id="makePost" onclick="makeForumPost();">Create Post</button>
       
     </div>
     
