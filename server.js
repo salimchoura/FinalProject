@@ -88,6 +88,7 @@ var Recipe = mongoose.model('Recipe', RecipeSchema);
 // schema for forum posts
 var PostSchema = new Schema({
   date: Date,
+  username: String,
   title: String,
   text: String,
   tag: String,
@@ -582,15 +583,6 @@ app.get('/recipe/get/comments/:recipe', (req, res) => {
 // make sure users are logged in before they can add forum post - extra guard
 app.use('/add/forum', authenticate);
 
-// Expected JSON object has the following parameters:
-// username: username of the user making the post
-// title: title of the post
-// content: content of the post (ie the text)
-// tag: tag on the post. In the project doc we specified that this is either
-// a Question or a Helpful Tidbit, but we could make these free-response as
-// well (which is why I put it as a string, so wecould easily change the names
-// or add new ones easily; if we wanted to stick to just two possible options
-// we could make buttons or radio buttons on the client side).
 /**
  * Route to add forum posts, by the username, title, content, and tag of the
  * post. Adds the new post to the database and then confirms that this action
@@ -615,6 +607,7 @@ app.post('/add/forum', (req, res) => {
       let currUser = found[0];
       let newPost = new ForumPost({
         date : currDate,
+        username : name,
         title : postTitle,
         text : postContent,
         tag : postTag,

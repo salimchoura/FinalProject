@@ -39,7 +39,7 @@ function lookForPost(){
 
         for (let element of posts)
         {
-            postString += `<div class="fPost"> <h1> username </h1> <a class='titleLink' onclick="goToPost();"> ${element['title']} </a> <br> </div>`;
+            postString += `<div class="fPost"> <h1> ${element['username']} </h1> <a class='titleLink' onclick="goToPost();"> ${element['title']} </a> <br> </div>`;
             forumPosts.innerHTML = postString;
         }
         
