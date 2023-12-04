@@ -10,22 +10,91 @@ let html = `
 
 <h1 id="postTag">${curr['tag']}</h1>`;
 
-
 let docHTML;
+let comHTML;
 
 window.onload = (() => {
     docHTML = '';
     docHTML += html;   
     document.getElementById('postContent').innerHTML = docHTML;
-});
 
+    comHTML = '';
+    document.getElementById('comments').innerHTML = comHTML;
+});
 
 
 
 function addComment(){
 
+    // gets the text and image inputs of the user from the post creation page
+    let name = sessionStorage.getItem('username');
+    let forum = curr._id;
+    let comment = document.getElementById('commentPost').value;
+
+    var httpRequest = new XMLHttpRequest();
+    if (!httpRequest) {
+        return false;
+    }
+
+    httpRequest.onreadystatechange = () => {
+        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+            if (httpRequest.status === 200) {
+                // for now, just log the response in the console
+                console.log(httpRequest.responseText);
+
+            } else { 
+                console.log('ERROR ADDING LISTING');
+            }
+        }
+    }
+    
+    // body for the post
+    newCommentPost = { 'username': name,
+                       'text': comment, 
+                       'forum': forum };
+
+    dataString = JSON.stringify(newCommentPost);
+
+    let url = '/forum/add/comment';
+    httpRequest.open('POST', url);
+    httpRequest.setRequestHeader('Content-type', 'application/json');
+    httpRequest.send(dataString);
+
 }
+
+var forumComment;
 
 function showComment(){
 
+    console.log('looking for comments...');
+    let forumID = curr._id;
+    let query = { forum: forumID };
+    console.log(forumID);
+    let url = '/forum/get/comments/' + forumID;
+
+    fetch(url)
+    .then((data) => { 
+        return data.text(); })
+    .then((text) => 
+    {
+        
+        let fComment = document.getElementById('comments');
+        fComment.innerHTML = '';
+
+        forumComment = JSON.parse(JSON.stringify(text));
+        let postString = '';
+
+        console.log('onload');
+
+        for (let element of forumComment)
+        {
+            console.log('idk');
+            postString += `<div class="fComment"> <h1> ${element['text']} </h1> </div>`;
+            fComment.innerHTML = postString;
+        }
+            
+    });
 }
+
+
+showComment();

@@ -28,6 +28,15 @@ h2{
     border: solid 2px #347a36;
 }
 
+.fComment{
+    position: relative;
+    z-index: 10;
+}
+
+#comments{
+    color: red;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
