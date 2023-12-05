@@ -92,7 +92,7 @@ function showComment(){
 
         var buttons = document.getElementsByClassName("editClass");
         var buttonsCount = buttons.length;
-        for (var i = 0; i <= buttonsCount; i += 1) {
+        for (var i = 0; i < buttonsCount; i += 1) {
             buttons[i].onclick = function() {
                 let theIdWeNeed = this.id;
                 console.log(theIdWeNeed);
