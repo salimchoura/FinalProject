@@ -62,8 +62,6 @@ function addComment(){
 
 }
 
-//var forumComment;
-
 function showComment(){
 
     let keyword = curr._id;
@@ -76,51 +74,16 @@ function showComment(){
 
         console.log(comm);
 
-        let reviews = JSON.parse(comm);            
+        let comments = JSON.parse(comm);            
         document.getElementById('comments').innerHTML = ''
-        // put the reviews into HTML
-        for (let review of reviews) {
-            // add each review to the DOM
-            document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${review.user} </h3><p> ${review.text} </p></div>`;
+        for (let item of comments) {
+            document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p> ${item.text} </p></div>`;
         }
-
-        // add products to homepage
-        //let comment = document.getElementById('comments');
-        //comment.innerHTML = itemsStr;
 
     }).catch((error) => {
         console.log("COULD NOT GET SEARCH RESULTS");
         console.log(error);
     });
-
-    /*console.log('looking for comments...');
-    let forumID = curr._id;
-    let query = { forum: forumID };
-    console.log(forumID);
-    let url = '/forum/get/comments/' + forumID;
-
-    fetch(url)
-    .then((data) => { 
-        return data.text(); })
-    .then((text) => 
-    {
-        
-        let fComment = document.getElementById('comments');
-        fComment.innerHTML = '';
-
-        forumComment = JSON.parse(JSON.stringify(text));
-        let postString = '';
-
-        console.log('onload');
-
-        for (let element of forumComment)
-        {
-            console.log('idk');
-            postString += `<div class="fComment"> <h1> ${element['text']} </h1> </div>`;
-            fComment.innerHTML = postString;
-        }
-            
-    });*/
 }
 
 
