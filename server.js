@@ -862,8 +862,9 @@ app.get('/forum/get/comments/:forum', (req, res) => {
     let foundComments = Comment.find({_id : { $in: allComments }});
     foundComments.then((results) => {
       res.end(JSON.stringify(results, null, 4));
-    });
-    foundComments.catch((error) => {
+    })
+  .catch((error) => {
+      console.log(error);
       res.end('COULD NOT FIND COMMENTS');
     });
   });
