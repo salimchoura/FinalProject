@@ -22,8 +22,6 @@ window.onload = (() => {
     document.getElementById('comments').innerHTML = comHTML;
 });
 
-// editpost redirect
-
 showComment();
 
 function addComment(){
@@ -52,10 +50,6 @@ function addComment(){
         if (text == 'SUCCESSFULLY UPDATED COMMENT') {
 
             showComment();
-
-            editBtn.onclick = () => {
-                
-            }
             return false;
         }
         else {
@@ -88,13 +82,36 @@ function showComment(){
         for (let item of comments) {
 
             if(name == curr.name){
-                document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p> ${item.text} </p> <button id="edit" onclick="editComment();">edit</button> </div>
+                document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p id="change"> ${item.text} </p> <button id="${item._id}" class="editClass" onclick="editComment();">edit</button> </div>
                 <br> <div id="editComment"></div>`;
             }else{
                 document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p> ${item.text} </p> </div>`;
             }
 
         }
+
+        var buttons = document.getElementsByClassName("editClass");
+        var buttonsCount = buttons.length;
+        for (var i = 0; i <= buttonsCount; i += 1) {
+            buttons[i].onclick = function() {
+                let theIdWeNeed = this.id;
+                console.log(theIdWeNeed);
+
+                document.getElementById('change').innerHTML = `<div id='textArea'>
+                        <textarea id="newCom" rows="3" cols="30"></textarea>
+                        
+                        <button id="done" class ="btn" type="reset" onclick="editComment('` + theIdWeNeed + `');">Done</button>
+                        
+                        </div>`;
+
+            };
+
+        }
+        
+        document.getElementById('done').onclick = () => {
+
+        }
+
 
     }).catch((error) => {
         console.log("COULD NOT GET SEARCH RESULTS");
@@ -103,43 +120,50 @@ function showComment(){
 }
 
 
-function editComment(){
 
+function editComment(theIdWeNeed){
 
-    document.getElementById('editComment').innerHTML = `<div id='textArea'>
-                <textarea id="newCom" rows="3" cols="30"></textarea>
-                
-                <button id="addComment" class ="btn" type="reset" onclick="addComment();">Done</button>
-                
-                </div>`;
+    var commID = theIdWeNeed;
+    console.log(commID);
 
-    document.getElementById('commentPost').value = document.getElementById('newCom').value;
+    // gets the text and image inputs of the user from the post creation page
+    let name = sessionStorage.getItem('username');
+    let forum = curr._id;
+    let comment = document.getElementById('newCom').value;
+    
+    // body for the post
+    newCommentPost = { 'username': name,
+                       'text': comment, 
+                       'forum': forum,
+                       'comment':commID};
 
-    let commID = '656ed730a07cc56a120c6663'; // how do i get the id?
+    dataString = JSON.stringify(newCommentPost);
 
-    let url = '/forum/add/comment';
-    let toFind = { foundComments : commID };
-    let request = fetch(url, {
+    let url = '/forum/edit/comment';
+
+    fetch(url, {
         method: 'POST',
-        body: JSON.stringify(toFind),
-        headers: {'Content-Type' : 'application/json'}
-    });
-
-    request.then((response) => {
+        body: JSON.stringify(newCommentPost),
+        headers: { 'Content-Type': 'application/json' }
+    }).then((response) => {
+        console.log(response);
         return response.text();
-    }).then((text) => {
-        if (text == 'SUCCESSFULLY UPDATED COMMENT') {
+    }).then((result) => {
 
+        console.log(result);
+        if (result == 'SUCCESSFULLY UPDATED COMMENT') {
+
+            document.getElementById('change').innerHTML = `<p id="change">${item.text}</p>`;
             showComment();
             return false;
         }
         else {
             alert('You need to be logged in to review and comment. Make sure your log in session has not expired');
         }
-    })
-    .catch((error) => {
-        console.log("ERROR MAKING PURCHASE");
+    }).catch((error) => {
+        console.log('THERE WAS AN ERROR ADDING A COMMENT');
         console.log(error);
     });
 
 }
+
