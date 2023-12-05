@@ -62,11 +62,38 @@ function addComment(){
 
 }
 
-var forumComment;
+//var forumComment;
 
 function showComment(){
 
-    console.log('looking for comments...');
+    let keyword = curr._id;
+    let url = '/forum/get/comments/' + keyword;
+    let resp = fetch(url);
+    resp.then((response) => {
+        console.log(response);
+        return response.text();
+    }).then((comm) => {
+
+        console.log(comm);
+
+        let reviews = JSON.parse(comm);            
+        document.getElementById('comments').innerHTML = ''
+        // put the reviews into HTML
+        for (let review of reviews) {
+            // add each review to the DOM
+            document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${review.user} </h3><p> ${review.text} </p></div>`;
+        }
+
+        // add products to homepage
+        //let comment = document.getElementById('comments');
+        //comment.innerHTML = itemsStr;
+
+    }).catch((error) => {
+        console.log("COULD NOT GET SEARCH RESULTS");
+        console.log(error);
+    });
+
+    /*console.log('looking for comments...');
     let forumID = curr._id;
     let query = { forum: forumID };
     console.log(forumID);
@@ -93,7 +120,7 @@ function showComment(){
             fComment.innerHTML = postString;
         }
             
-    });
+    });*/
 }
 
 
