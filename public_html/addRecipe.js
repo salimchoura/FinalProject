@@ -1,3 +1,14 @@
+/* Author: Salim Choura, Yanxiao Chen, 
+ * Adrianna Shingyi Koppes, Nilufer Demirbas
+/* Course: CSC 337
+/* Description: Style file is responsible for the 
+*  client side of addRecipe.js */
+
+
+
+// When the user clicks on the plus button, we append a new
+// input field to the DOM where the user can add more ingredients
+// to their recipe.
 document.getElementById('addSpace').onclick = () => {
 
     let child = `    <div>
@@ -11,10 +22,15 @@ document.getElementById('addSpace').onclick = () => {
 
 
 
-
+// When the user clicks on the post button, we add the recipe
+// they specified to the database.
 document.getElementById('post').onclick = addRecipe
 
 
+/*
+ * This function extracts the recipe data from the input field, organizes
+ * the data, then sends it to the server to save it to the database.
+ */
 function addRecipe() {
     // Get the values of the item inputs
     console.log('clicked')
@@ -27,19 +43,14 @@ function addRecipe() {
     const fat = document.getElementById('fat').value;
     let ingredients = []
     let docIngredients = document.getElementById('ingredients')
+
+    // extracting the ingredients
     for (let ingredient of docIngredients.children) {
         if (ingredient.children.length != 0) {
             let obj = { 'regular': ingredient.children[1].value, 'substitute': ingredient.children[3].value }
             ingredients.push(obj)
         }
     }
-    console.log(image)
-    console.log(title)
-    console.log(carbs)
-    console.log(fat)
-    console.log(protein)
-    console.log(instructions)
-    console.log(ingredients)
 
     const formData = new FormData();
     formData.append('photo', image);
@@ -51,6 +62,7 @@ function addRecipe() {
     formData.append('ingredients', JSON.stringify(ingredients));
     console.log(formData)
 
+    // sending the recipe along with the poster of the recipe to the server.
     let data = decodeURIComponent(document.cookie)
     let sliced = data.slice(8, data.length + 1)
     let converted = JSON.parse(sliced)

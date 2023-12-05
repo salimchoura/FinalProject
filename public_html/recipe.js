@@ -9,6 +9,7 @@
  * File Authors: Salim Choura and Adrianna Koppes
  */
 
+//getting the data of the current/clicked recipe
 console.log(window.localStorage.getItem('current'))
 let current = JSON.parse(window.localStorage.getItem('current'))
 
@@ -18,8 +19,6 @@ let carbs = current['carbs']
 let fat = current['fat']
 let ingredients = current['ingredients']
 
-//ingredients: [{'regular' : String, 'substitute' : String}],
-//instructions: String
 
 console.log(current)
 let html = `
@@ -40,6 +39,7 @@ html += `${current['instructions']}<br>`
 document.getElementById('recipe').innerHTML = ''
 document.getElementById('recipe').innerHTML += html
 
+// making a pie chart with the carb/protein/fat breakdown.
 const data = [carbs, fat, protein];
 let labels = ['carbs', 'fat', 'protein'];
 
@@ -199,6 +199,10 @@ function showReviews() {
     })
 }
 
+
+// we make a variable that keeps track of the order of the star
+// that the user clicked which will represent the star review.
+// when a star is clicked the variable changes accoringly.
 var stars = 0
 
 let inputs = document.getElementsByTagName('input')
@@ -207,12 +211,20 @@ for (let i = 0; i < inputs.length; i++) {
     input.onclick = () => { stars = 6 - (i + 1) }
 }
 
-
+// when we click on the post button which means we update the reviews
+// we reflect the change in our data base.
 btn.onclick = () => {
     addReview(stars)
 }
 
-
+/**
+ * 
+ * @param reviews: a list of reviews made by users
+ * This function loops through the list of star reviews 
+ * and stores them in a dictionary that maps the number of 
+ * stars to the number of users then uses d3.js to show
+ * a bar chart of the reviews.
+ */
 function makeBarChart(reviews) {
     let formatted = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
     for (let review of reviews) {
@@ -283,6 +295,4 @@ function makeBarChart(reviews) {
         .attr("y", d => yScale(d.count))
         .attr("width", xScale.bandwidth())
         .attr("height", d => innerHeight - yScale(d.count));
-
-
 }

@@ -1,3 +1,8 @@
+/* Author: Salim Choura, Yanxiao Chen, 
+ * Adrianna Shingyi Koppes, Nilufer Demirbas
+/* Course: CSC 337
+/* Description: Style file for recipe.html */
+
 #recipe, #comments, .comment {
     max-width: 800px;
     margin: 20px auto;
