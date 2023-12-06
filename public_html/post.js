@@ -14,8 +14,7 @@ function showPost() {
         .then((response) => { return response.text() })
         .then((confirmation) => {
             let username = window.sessionStorage.getItem('username');
-            if (confirmation == 1 && username == curr['username'])
-            {
+            if (confirmation == 1 && username == curr['username']) {
                 console.log('here')
                 html += `<div id="editPostButton" ><button id="editPost">Edit Post</button>`
             }
@@ -26,26 +25,21 @@ function showPost() {
 }
 
 function showComment() {
-    fetch('/check/user')
-        .then((response) => { return response.text() })
-        .then((confirmation) => {
-            console.log(curr)
-            let keyword = curr._id;
-            let url = '/forum/get/comments/' + keyword;
-            let resp = fetch(url);
-            resp.then((response) => { return response.text() })
-                .then((comments) => {
-                    let formatted = JSON.parse(comments);
-                    document.getElementById('comments').innerHTML = ''
-                    for (let item of formatted) {
-                        let username = window.sessionStorage.getItem('username');
-                        if (confirmation == 1 && username == item['user']) {
-                            document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p id="change"> ${item.text} </p> <button id="${item._id}" class="editClass">edit</button> </div><br> <div id="editComment"></div>`;
-                        } else {
-                            document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p> ${item.text} </p> </div>`;
-                        }
-                    }
-                }).catch(() => { console.log("COULD NOT GET COMMENTS") });
+
+    console.log(curr)
+    let keyword = curr._id;
+    let url = '/forum/get/comments/' + keyword;
+    let resp = fetch(url);
+    resp.then((response) => { return response.text() })
+        .then((comments) => 
+        {
+            let formatted = JSON.parse(comments);
+            document.getElementById('comments').innerHTML = ''
+            for (let item of formatted) 
+            {
+                document.getElementById('comments').innerHTML 
+                += `<div class='comment'><h3> ${item.user} </h3><p> ${item.text} </p> </div>`;
+            }
         })
 }
 
@@ -161,11 +155,9 @@ function editPost() {
 
 }
 
-function addListeners()
-{
+function addListeners() {
     let button = document.getElementById('editPostButton')
-    if (button != undefined)
-    {
+    if (button != undefined) {
         button.onclick = editPost
     }
 }
