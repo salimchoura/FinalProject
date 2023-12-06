@@ -9,8 +9,20 @@ function showPost() {
     <span>${curr['title']}</span>
     <div id="postText">${curr['text']}<br> <br>-${curr['username']}</div>
     </div>`;
-    document.getElementById('postContent').innerHTML = html;
-    document.getElementById('comments').innerHTML = '';
+    console.log(curr)
+    fetch('/check/user')
+        .then((response) => { return response.text() })
+        .then((confirmation) => {
+            let username = window.sessionStorage.getItem('username');
+            if (confirmation == 1 && username == curr['username'])
+            {
+                console.log('here')
+                html += `<div id="editPostButton" ><button id="editPost">Edit Post</button>`
+            }
+            document.getElementById('postContent').innerHTML = html;
+            document.getElementById('comments').innerHTML = '';
+            addListeners()
+        })
 }
 
 function showComment() {
@@ -36,9 +48,6 @@ function showComment() {
                 }).catch(() => { console.log("COULD NOT GET COMMENTS") });
         })
 }
-
-
-showComment();
 
 function addComment() {
 
@@ -150,4 +159,13 @@ function editPost() {
         console.log(error);
     });
 
+}
+
+function addListeners()
+{
+    let button = document.getElementById('editPostButton')
+    if (button != undefined)
+    {
+        button.onclick = editPost()
+    }
 }
