@@ -81,14 +81,22 @@ function showComment(){
         
         for (let item of comments) {
 
-            console.log(curr.user);
-
-            if(name == curr.user){
-                document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p id="change"> ${item.text} </p> <button id="${item._id}" class="editClass" onclick="editComment();">edit</button> </div>
-                <br> <div id="editComment"></div>`;
-            }else{
-                document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p> ${item.text} </p> </div>`;
-            }
+            fetch('/check/user').then((response) => {
+                console.log(response);
+                return response.text();
+            }).then((comm) => {
+        
+                if(comm == 1){
+                    document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p id="change"> ${item.text} </p> <button id="${item._id}" class="editClass" onclick="editComment();">edit</button> </div>
+                    <br> <div id="editComment"></div>`;
+                }else if(comm == 0){
+                    document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p> ${item.text} </p> </div>`;
+                }
+        
+            }).catch((error) => {
+                console.log("COULD NOT GET USER LOGIN INFO");
+                console.log(error);
+            }); 
 
         }
 
@@ -110,15 +118,11 @@ function showComment(){
 
         }
         
-        //document.getElementById('done').onclick = () => {
-            
-        //}
-
-
     }).catch((error) => {
         console.log("COULD NOT GET SEARCH RESULTS");
         console.log(error);
     });
+
 }
 
 
@@ -169,3 +173,24 @@ function editComment(theIdWeNeed){
 
 }
 
+function editPost(){
+
+    fetch('/check/user').then((response) => {
+        console.log(response);
+        return response.text();
+    }).then((comm) => {
+
+        if(comm == 1){
+            document.getElementById('editPostButton').innerHTML += `<div id="editPostButton" ><button id="editPost" onclick="editPost();">Edit Post</button></div>`;
+            window.location = 'editPost.html';
+            
+        }else if(comm == 0){
+            document.getElementById('editPostButton').innerHTML += `<div id="editPostButton" ><h1>Login To Edit Post</h1></div>`;
+        }
+
+    }).catch((error) => {
+        console.log("COULD NOT GET USER LOGIN INFO");
+        console.log(error);
+    });
+
+}
