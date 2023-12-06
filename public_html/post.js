@@ -1,40 +1,61 @@
 
-console.log(window.localStorage.getItem('curr'));
 let curr = JSON.parse(window.localStorage.getItem('curr'));
+showPost()
+showComment()
 
-let html = `
-<h1>${curr['username']}</h1>
-<h2>${curr['title']}</h2>
+function showPost() {
+    let html = `<div class='post'>
+    <span id="postTag">/${curr['tag']}/</span>
+    <span>${curr['title']}</span>
+    <div id="postText">${curr['text']}<br> <br>-${curr['username']}</div>
+    </div>`;
+    document.getElementById('postContent').innerHTML = html;
+    document.getElementById('comments').innerHTML = '';
+}
 
-<div id="postText">${curr['text']}</div>
+function showComment() {
+    fetch('/check/user')
+        .then((response) => { return response.text() })
+        .then((confirmation) => {
+            console.log(curr)
+            let keyword = curr._id;
+            let url = '/forum/get/comments/' + keyword;
+            let resp = fetch(url);
+            resp.then((response) => { return response.text() })
+                .then((comments) => {
+                    let formatted = JSON.parse(comments);
+                    document.getElementById('comments').innerHTML = ''
+                    for (let item of formatted) {
+                        let data = decodeURIComponent(document.cookie)
+                        let sliced = data.slice(8, data.length + 1)
+                        let converted = JSON.parse(sliced)
+                        let username = converted['username']
+                        if (confirmation == 1 && username == item['user']) {
+                            document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p id="change"> ${item.text} </p> <button id="${item._id}" class="editClass">edit</button> </div><br> <div id="editComment"></div>`;
+                        } else {
+                            document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p> ${item.text} </p> </div>`;
+                        }
+                    }
+                }).catch(() => { console.log("COULD NOT GET COMMENTS") });
+        })
+}
 
-<h1 id="postTag">${curr['tag']}</h1>`;
-
-let docHTML;
-let comHTML;
-
-window.onload = (() => {
-    docHTML = '';
-    docHTML += html;   
-    document.getElementById('postContent').innerHTML = docHTML;
-
-    comHTML = '';
-    document.getElementById('comments').innerHTML = comHTML;
-});
 
 showComment();
 
-function addComment(){
+function addComment() {
 
     // gets the text and image inputs of the user from the post creation page
     let name = sessionStorage.getItem('username');
     let forum = curr._id;
     let comment = document.getElementById('commentPost').value;
-    
+
     // body for the post
-    newCommentPost = { 'username': name,
-                       'text': comment, 
-                       'forum': forum };
+    newCommentPost = {
+        'username': name,
+        'text': comment,
+        'forum': forum
+    };
 
     dataString = JSON.stringify(newCommentPost);
 
@@ -62,72 +83,10 @@ function addComment(){
 
 }
 
-function showComment(){
-
-    let keyword = curr._id;
-    let url = '/forum/get/comments/' + keyword;
-    let resp = fetch(url);
-    resp.then((response) => {
-        console.log(response);
-        return response.text();
-    }).then((comm) => {
-
-        console.log(comm);
-
-        let comments = JSON.parse(comm);            
-        document.getElementById('comments').innerHTML = ''
-        
-        let name = comments.name;
-        
-        for (let item of comments) {
-
-            fetch('/check/user').then((response) => {
-                console.log(response);
-                return response.text();
-            }).then((comm) => {
-        
-                if(comm == 1){
-                    document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p id="change"> ${item.text} </p> <button id="${item._id}" class="editClass" onclick="editComment();">edit</button> </div>
-                    <br> <div id="editComment"></div>`;
-                }else if(comm == 0){
-                    document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p> ${item.text} </p> </div>`;
-                }
-        
-            }).catch((error) => {
-                console.log("COULD NOT GET USER LOGIN INFO");
-                console.log(error);
-            }); 
-
-        }
-
-        var buttons = document.getElementsByClassName("editClass");
-        var buttonsCount = buttons.length;
-        for (var i = 0; i < buttonsCount; i += 1) {
-            buttons[i].onclick = function() {
-                let theIdWeNeed = this.id;
-                console.log(theIdWeNeed);
-
-                document.getElementById('change').innerHTML = `<div id='textArea'>
-                        <textarea id="newCom" rows="3" cols="30"></textarea>
-                        
-                        <button id="done" class ="btn" type="reset" onclick="editComment('` + theIdWeNeed + `');">Done</button>
-                        
-                        </div>`;
-
-            };
-
-        }
-        
-    }).catch((error) => {
-        console.log("COULD NOT GET SEARCH RESULTS");
-        console.log(error);
-    });
-
-}
 
 
 
-function editComment(theIdWeNeed){
+function editComment(theIdWeNeed) {
 
     var commID = theIdWeNeed;
     console.log(commID);
@@ -136,12 +95,14 @@ function editComment(theIdWeNeed){
     let name = sessionStorage.getItem('username');
     let forum = curr._id;
     let comment = document.getElementById('newCom').value;
-    
+
     // body for the post
-    newCommentPost = { 'username': name,
-                       'text': comment, 
-                       'forum': forum,
-                       'comment':commID};
+    newCommentPost = {
+        'username': name,
+        'text': comment,
+        'forum': forum,
+        'comment': commID
+    };
 
     dataString = JSON.stringify(newCommentPost);
 
@@ -173,17 +134,17 @@ function editComment(theIdWeNeed){
 
 }
 
-function editPost(){
+function editPost() {
 
     fetch('/check/user').then((response) => {
         console.log(response);
         return response.text();
     }).then((comm) => {
 
-        if(comm == 1){
+        if (comm == 1) {
             window.location = 'editPost.html';
-            
-        }else if(comm == 0){
+
+        } else if (comm == 0) {
             document.getElementById('editPostButton').innerHTML += `<h1>Login To Edit Post</h1><`;
         }
 

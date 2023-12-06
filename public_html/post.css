@@ -3,15 +3,30 @@ h1{
     padding-top: 3%;
     padding-left:7%;
     text-align: left;
-    color:#347a36;
     font-weight: bolder;
     font-size:25px;
+}
+
+.post
+{
+    max-width: 800px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    color: black;
+}
+
+.comment {
+    max-width: 800px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h2{
     padding-left:7%;
     text-align: left;
-    color:#4caf50;
     font-weight: bolder;
     font-size: 50px;
 }
@@ -31,16 +46,12 @@ button{
     font-size: 10px;
 }
 
-#postTag{
-    font-size:15px;
-}
 
 #postText{
     margin-left:7%;
     margin-right:7%;
-    color:#347a36;
-    padding: 1%;
-    border: solid 2px #347a36;
+    margin-top: 20px;
+    padding: 20px;
 }
 
 .fComment{
