@@ -36,6 +36,13 @@ function makeForumPost(){
             if (httpRequest.status === 200) {
                 // for now, just log the response in the console
                 console.log(httpRequest.responseText);
+                let result = httpRequest.responseText;
+                if (result == 'SUCCESSFULLY CREATED POST') {
+                    window.alert('added post successfully');
+                }
+                else {
+                    alert('You need to be logged in to review and comment. Make sure your log in session has not expired');
+                }
 
             } else { 
                 console.log('ERROR ADDING LISTING');
