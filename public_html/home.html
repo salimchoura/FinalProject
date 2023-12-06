@@ -4,11 +4,12 @@
     Description: This file makes a homepage of the website
     containing a snippet of a the website (slideshow and nav bar)-->
 
+<!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta charset="UTF-8">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel='stylesheet' href="home.css">
-        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Home page</title>
     </head>
@@ -21,12 +22,12 @@
             <a href="forum.html">Explore forum</a>
             <a href="explore_recipes.html">Explore recipes</a>
         </nav>
-        <section class="container">
+        <div class="container">
             <div class="slider-wrapper">
                 <div class="slider">
-                    <img id="slide-1" src="images/shakshouka.jpg" />
-                    <img id="slide-2" src="./images/tart.jpg" />
-                    <img id="slide-3" src="./images/smoothie.png" />
+                    <img id="slide-1" alt="slide-1" src="images/shakshouka.jpg">
+                    <img id="slide-2" alt="slide-2" src="./images/tart.jpg">
+                    <img id="slide-3" alt="slide-3" src="./images/smoothie.png">
                 </div>
                 <div class="slider-nav">
                     <a href="#slide-1"></a>
@@ -34,9 +35,7 @@
                     <a href="#slide-3"></a>
                 </div>
             </div>
-        </section>
+        </div>
         <script src="home.js"></script>
     </body>
 </html>
-
-
