@@ -11,6 +11,15 @@ h1{
     font-size:25px;
 }
 
+#title{
+    color: #4CAF50;
+    padding-top: 3%;
+    padding-left:7%;
+    text-align: left;
+    font-weight: bolder;
+    font-size:25px;
+}
+
 .post
 {
     max-width: 800px;

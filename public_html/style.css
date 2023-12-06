@@ -13,6 +13,15 @@ body {
     height: 100vh;
     animation: fadeIn 1s ease-in-out;
   }
+
+  #title{
+    color: #4CAF50;
+    padding-top: 3%;
+    padding-left:7%;
+    text-align: left;
+    font-weight: bolder;
+    font-size:25px;
+  }
   
   @keyframes fadeIn {
     from {

@@ -12,13 +12,24 @@ body {
     font-family: 'Arial', sans-serif;
 }
 
+
+
 html,
 body {
 	margin: 0;
 	padding: 0;
 }
 
-h1 {
+#title{
+    color: #4CAF50;
+    padding-top: 3%;
+    padding-left:7%;
+    text-align: left;
+    font-weight: bolder;
+    font-size:25px;
+}
+
+h1{
     font-size: 40px;
     margin-left: 20px;
     color: black;
