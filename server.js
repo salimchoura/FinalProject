@@ -673,7 +673,7 @@ app.post('/forum/edit/comment', (req, res) => {
     let forumResult = ForumPost.find({_id : forumID}).exec();
     forumResult.then((forumFind) => {
       let currForum = forumFind[0];
-      let commResult = Comment.find({_id : commentID});
+      let commResult = Comment.find({_id : commentID}).exec();
       commResult.then((commFind) => {
         let currComment = commFind[0];
         if(currUser.comments.includes(commentID) == false) {
@@ -686,12 +686,14 @@ app.post('/forum/edit/comment', (req, res) => {
         commSave.catch((error) => {
           res.end('FAILED TO SAVE NEW COMMENT TEXT');
         });
+        
         let forumSave = currForum.save();
         forumSave.then((saveRes) => {});
         forumSave.catch((error) => {
           res.end('FAILED TO SAVE NEW COMMENT WITH FORUM POST');
         });
         answer = 'SUCCESSFULLY EDITED COMMENT';
+        
         let userSave = currUser.save();
         userSave.then((useSaveResult) => {
           res.end(answer);
@@ -734,7 +736,7 @@ app.get('/forum/get/comments/:forum', (req, res) => {
     })
   .catch((error) => {
       console.log(error);
-      res.end('COULD NOT FIND COMMENTS');
+      res.end('COULD NOT GET COMMENTS');
     });
   });
   searched.catch((error) => {
