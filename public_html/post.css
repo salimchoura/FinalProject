@@ -1,4 +1,4 @@
-/* Author: Salim Choura, Yanxiao Chen, 
+/* Author: Salim Choura, Yanxihao Chen, 
  * Adrianna Shingyi Koppes, Nilufer Demirbas
 /* Course: CSC 337
 /* Description: Style file for post.html */
@@ -77,7 +77,7 @@ button{
     z-index: 10;
 }
 #comments{
-    margin-left:17vw;
+    margin-left:21vw;
     margin-right:7%;
     text-align: left;
 }
