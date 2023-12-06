@@ -166,6 +166,6 @@ function addListeners()
     let button = document.getElementById('editPostButton')
     if (button != undefined)
     {
-        button.onclick = editPost()
+        button.onclick = editPost
     }
 }
