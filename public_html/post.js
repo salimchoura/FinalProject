@@ -40,11 +40,12 @@ function showComment() {
                     for (let item of formatted) {
                         let username = window.sessionStorage.getItem('username');
                         if (confirmation == 1 && username == item['user']) {
-                            document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p id="change"> ${item.text} </p> <button id="${item._id}" class="editClass">edit</button> </div><br> <div id="editComment"></div>`;
+                            document.getElementById('comments').innerHTML += `<div id="${item._id}" class='comment'><h3> ${item.user} </h3><p id="change"> ${item.text} </p> <button class="editClass">edit</button> </div><br> <div id="editComment"></div>`;
                         } else {
                             document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p> ${item.text} </p> </div>`;
                         }
                     }
+                    addCommentListeners();
                 }).catch(() => { console.log("COULD NOT GET COMMENTS") });
         })
 }
@@ -100,7 +101,7 @@ function editComment(theIdWeNeed) {
     // gets the text and image inputs of the user from the post creation page
     let name = sessionStorage.getItem('username');
     let forum = curr._id;
-    let comment = document.getElementById('newCom').value;
+    let comment = document.getElementById(commID).value;
 
     // body for the post
     newCommentPost = {
@@ -167,5 +168,22 @@ function addListeners()
     if (button != undefined)
     {
         button.onclick = editPost
+    }
+}
+
+function addCommentListeners() {
+    let allComms = document.getElementsByClassName('comment');
+    for(let comm of allComms) {
+        let currID = comm.id;
+        let allChildren = comm.children;
+        if(allChildren.length > 2) {
+            let currButton = allChildren[2];
+            let handle = function(e) {
+                return editComment(currID);
+            }
+            if(currButton != undefined) {
+                currButton.addEventListener("click", handle);
+            }
+        }
     }
 }
