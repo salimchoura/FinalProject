@@ -7,6 +7,10 @@
  * File Author: Nilufer Demirbas
  */
 
+// The following function takes values from html elements as well as 
+// the sessionstorage to make the body of newForumPost that will get
+// recorded in the data base to be called later on.
+
 function makeForumPost(){
 
     // gets the text and image inputs of the user from the post creation page

@@ -1,3 +1,12 @@
+/*
+ * Nilufer Demirbas, Salim Choura, Yanxihao Chen, and Adrianna Koppes
+ * This file contains the code to make sure the input and textarea 
+ * fields contain the values from the post that you have chosen to edit.
+ * It finds the current post you are editing and updates all the 
+ * information accordingly from the inputs entered by the user.
+ * 
+ * File Author: Nilufer Demirbas
+ */
 
 let curr = JSON.parse(window.localStorage.getItem('curr'));
 console.log(curr);
@@ -5,7 +14,12 @@ console.log(curr);
 document.getElementById('postTitle').value = curr['title'];
 document.getElementById('textPost').value = curr['text'];
 
-
+// The following function takes the object id of the post to know where it
+// needs to apply the updates from the text fields to. It adds the data to
+// the newPost body, stringifies it and enters it into the promise.
+// The promise fetches the desired text result to confirm that the edit
+// was a success and replaces the innerHTML of the old post with the updated
+// version.
 
 function editForumPost(){
 

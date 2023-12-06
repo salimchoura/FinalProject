@@ -1,16 +1,18 @@
+/* Author: Salim Choura, Yanxiao Chen, 
+ * Adrianna Shingyi Koppes, Nilufer Demirbas
+/* Course: CSC 337
+/* Description: Style file for forum.html */
 body {
     background-color: rgb(137, 247, 151);
-	text-align: center;
+    text-align: center;
     font-family: 'Arial', sans-serif;
     animation: fadeIn 1s ease-in-out;
 }
-
 html,
 body {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
-
 
 #searchForum{
     margin-top: 75px;
@@ -22,7 +24,6 @@ body {
     overflow: hidden;
     max-width: 600px;
 }
-
 .fPost{
     border: 2px green solid;
     color: green;
@@ -32,23 +33,19 @@ body {
     position: relative;
     z-index: 10;
 }
-
 .titleLink{
     font-size: 30px;
     font-weight: bolder;
     color: green;
     font-style:normal;
 }
-
 .titleLink:hover{
     color:#68d16c;
 }
-
 h1{
     font-size: 20px;
     color:#4CAF50;
 }
-
 #tag{
     flex: 1;
     padding: 10px;
@@ -56,7 +53,6 @@ h1{
     outline: none;
     font-size: 16px;
 }
-
 #searchButton{
     background-color: #4CAF50;
     color: #fff;
@@ -65,7 +61,6 @@ h1{
     cursor: pointer;
     font-size: 16px;
 }
-
 #makePost
 {
     background-color: #E1AD01;
@@ -75,58 +70,48 @@ h1{
     cursor: pointer;
     font-size: 16px;
 }
-
 @keyframes fadeIn {
     from {
         opacity: 0;
     }
-
     to {
         opacity: 1;
     }
 }
-
 
 @keyframes bounceIn {
     from {
         transform: scale(0.8);
     }
-
     to {
         transform: scale(1);
     }
 }
-
 @keyframes slideIn {
     from {
         transform: translateY(-20px);
         opacity: 0;
     }
-
     to {
         transform: translateY(0);
         opacity: 1;
     }
 }
-
 @keyframes fadeInUp {
     from {
         opacity: 0;
         transform: translateY(20px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
-
 nav {
     background-color: #4caf50;
     overflow: hidden;
     height: 100px;
 }
-
 nav a,
 #title {
     margin-top: 30px;
@@ -138,12 +123,10 @@ nav a,
     transition: background-color 0.3s;
     margin-left: 30px;
 }
-
 #title {
     margin-top: 0px;
     font-size: 60px;
 }
-
 a{
   font-size: 20px;
 }

@@ -53,6 +53,11 @@ function lookForPost(){
     });
 }
 
+// This function records the data of the post
+// after it is clicked, so that it can relay the
+// information to the new html page and its js file
+// via the window.localStorage.
+
 function postListener()
 {
     let tags = document.getElementsByClassName('fPost')

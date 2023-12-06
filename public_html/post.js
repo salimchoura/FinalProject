@@ -1,8 +1,27 @@
+/*
+ * Nilufer Demirbas, Salim Choura, Yanxihao Chen, and Adrianna Koppes
+ * This file contains all the code necessary for making a forum post where
+ * a user shall enter a title for the post, any text for the post itself,
+ * an image if they would like, and a tag to make their post easier to find.
+ * 
+ * File Authors: Adrianna Koppes, Salim Choura, and Nilufer Demirbas
+ */
+
+// This gets information from the window.local.storage from 
+// the forum page so that the values of the post that the
+// user clicked on can be retrieved in this js file.
 
 let curr = JSON.parse(window.localStorage.getItem('curr'));
 showPost()
 showComment()
 document.getElementById('addComment').onclick = addComment
+
+// The following function manipulates the innerHTML of the
+// post page so it shows specifically the post that the 
+// user clicked on in the forum page. Additionally it checks
+// to see if you are logged in via a promise path that returns 
+// 1 if you are logged in, and shows an "edit" button to edit
+// the post on a different page.
 
 function showPost() {
     let html = `<div class='post'>
@@ -25,6 +44,12 @@ function showPost() {
         })
 }
 
+// This function uses the object id of this post to fetch the 
+// comments in the comments array object within this post. 
+// The it iterates through all of the comments and displays 
+// them on the page by manipulating the innerHTML of an html 
+// element in the post.html page. 
+
 function showComment() {
 
     console.log(curr)
@@ -43,6 +68,12 @@ function showComment() {
             }
         })
 }
+
+// The following function mkes a new comment. 
+// It gets the current post's id, the username from the current session,
+// and the content of the comment textfield, to save their values into the newCommentPost
+// body, before stringifying it. Then the body is posted onto the database, and 
+// a success message is returned by the promise when it works.
 
 function addComment() {
 
@@ -84,6 +115,11 @@ function addComment() {
 
 }
 
+// The following function edits the post that you are currently viewing 
+// on post.html. It first checks to see if you are logged in and if you
+// are allowed to edit the post. If so, the edit button will appear by
+// updating the innerHTML value. 
+
 function editPost() {
 
     fetch('/check/user').then((response) => {
@@ -104,6 +140,9 @@ function editPost() {
     });
 
 }
+
+// The following function listens to see if the editPostButton
+// is clicked, and if so, it takes the user to the editPost page
 
 function addListeners() {
     let button = document.getElementById('editPostButton')
