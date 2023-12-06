@@ -84,57 +84,6 @@ function addComment() {
 
 }
 
-
-
-
-function editComment(theIdWeNeed) {
-
-    var commID = theIdWeNeed;
-    console.log(commID);
-
-    // gets the text and image inputs of the user from the post creation page
-    let name = sessionStorage.getItem('username');
-    let forum = curr._id;
-    let comment = document.getElementById(commID).value;
-
-    // body for the post
-    newCommentPost = {
-        'username': name,
-        'text': comment,
-        'forum': forum,
-        'comment': commID
-    };
-
-    dataString = JSON.stringify(newCommentPost);
-
-    let url = '/forum/edit/comment';
-
-    fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(newCommentPost),
-        headers: { 'Content-Type': 'application/json' }
-    }).then((response) => {
-        console.log(response);
-        return response.text();
-    }).then((result) => {
-        console.log(result);
-
-        if (result == 'SUCCESSFULLY EDITED COMMENT') {
-
-            document.getElementById('change').innerHTML = `<p id="change">${comment}</p>`;
-            showComment();
-            return false;
-        }
-        else {
-            alert('You need to be logged in to review and comment. Make sure your log in session has not expired');
-        }
-    }).catch((error) => {
-        console.log('THERE WAS AN ERROR ADDING A COMMENT');
-        console.log(error);
-    });
-
-}
-
 function editPost() {
 
     fetch('/check/user').then((response) => {
@@ -160,22 +109,5 @@ function addListeners() {
     let button = document.getElementById('editPostButton')
     if (button != undefined) {
         button.onclick = editPost
-    }
-}
-
-function addCommentListeners() {
-    let allComms = document.getElementsByClassName('comment');
-    for(let comm of allComms) {
-        let currID = comm.id;
-        let allChildren = comm.children;
-        if(allChildren.length > 2) {
-            let currButton = allChildren[2];
-            let handle = function(e) {
-                return editComment(currID);
-            }
-            if(currButton != undefined) {
-                currButton.addEventListener("click", handle);
-            }
-        }
     }
 }
