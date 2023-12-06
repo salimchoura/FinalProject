@@ -81,7 +81,9 @@ function showComment(){
         
         for (let item of comments) {
 
-            if(name == curr.name){
+            console.log(curr.user);
+
+            if(name == curr.user){
                 document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p id="change"> ${item.text} </p> <button id="${item._id}" class="editClass" onclick="editComment();">edit</button> </div>
                 <br> <div id="editComment"></div>`;
             }else{
@@ -146,21 +148,18 @@ function editComment(theIdWeNeed){
         body: JSON.stringify(newCommentPost),
         headers: { 'Content-Type': 'application/json' }
     }).then((response) => {
-        console.log('1');
         console.log(response);
         return response.text();
     }).then((result) => {
-        console.log('2');
         console.log(result);
 
         if (result == 'SUCCESSFULLY EDITED COMMENT') {
 
-            document.getElementById('change').innerHTML = `<p id="change">${item.text}</p>`;
+            document.getElementById('change').innerHTML = `<p id="change">${comment}</p>`;
             showComment();
             return false;
         }
         else {
-            console.log('3');
             alert('You need to be logged in to review and comment. Make sure your log in session has not expired');
         }
     }).catch((error) => {
