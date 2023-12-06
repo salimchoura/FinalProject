@@ -108,9 +108,9 @@ function showComment(){
 
         }
         
-        document.getElementById('done').onclick = () => {
-
-        }
+        //document.getElementById('done').onclick = () => {
+            
+        //}
 
 
     }).catch((error) => {
@@ -146,18 +146,21 @@ function editComment(theIdWeNeed){
         body: JSON.stringify(newCommentPost),
         headers: { 'Content-Type': 'application/json' }
     }).then((response) => {
+        console.log('1');
         console.log(response);
         return response.text();
     }).then((result) => {
-
+        console.log('2');
         console.log(result);
-        if (result == 'SUCCESSFULLY UPDATED COMMENT') {
+
+        if (result == 'SUCCESSFULLY EDITED COMMENT') {
 
             document.getElementById('change').innerHTML = `<p id="change">${item.text}</p>`;
             showComment();
             return false;
         }
         else {
+            console.log('3');
             alert('You need to be logged in to review and comment. Make sure your log in session has not expired');
         }
     }).catch((error) => {

@@ -2,10 +2,9 @@
 let curr = JSON.parse(window.localStorage.getItem('curr'));
 console.log(curr);
 
-document.getElementById('postTitle').innerHTML = '';
-document.getElementById('postTitle').innerHTML = `<input type="text" id="postTitle" placeholder="${curr['title']}">`;
-document.getElementById('postTitle').innerHTML = '';
-document.getElementById('textPost').innerHTML = `<textarea id="textPost" rows="8" cols="30" placeholder="${curr['content']}"></textarea>`;
+document.getElementById('postTitle').value = curr['title'];
+document.getElementById('textPost').value = curr['text'];
+
 
 
 function editForumPost(){
@@ -41,7 +40,7 @@ function editForumPost(){
 
         
 
-        if (result == 'SUCCESSFULLY UPDATED COMMENT') {
+        if (result == 'SUCCESSFULLY UPDATED FORUM POST') {
 
             document.getElementById('content').innerHTML = `<p id="change">${item.text}</p>`;
             return false;
