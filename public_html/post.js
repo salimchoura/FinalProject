@@ -2,6 +2,7 @@
 let curr = JSON.parse(window.localStorage.getItem('curr'));
 showPost()
 showComment()
+document.getElementById('addComment').onclick = addComment
 
 function showPost() {
     let html = `<div class='post'>
