@@ -299,7 +299,7 @@ app.post('/add/recipe/:username', upload.single('photo'), (req, res) => {
   let p = User.findOne({ username: username }).exec()
   p.then((user) => {
     user.recipes.push(newRecipe.id)
-    user.save().then(() => { console.log('update of user recipes list made') })
+    user.save().then(() => { console.log('update of user recipes list made'); res.end('recipe posted sucessfully') })
       .catch((error) => { console.log('failed to update of user recipes list', error) })
   })
     .catch((error) => { console.log('could not add item to user listing', error) })

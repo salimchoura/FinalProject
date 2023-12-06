@@ -78,7 +78,8 @@ function addRecipe() {
     // Log a message if the POST request was successful
     p.then((data) => {
         return data.text()
-    }).then((text) => { if (text != undefined) { console.log(text) } })
+    }).then((text) => { 
+        if (text != undefined) { window.alert('recipe added successfully') } })
 
     // Show an alert message if the POST request failed
     p.catch(() => {

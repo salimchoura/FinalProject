@@ -81,6 +81,17 @@ button{
     margin-right:7%;
     text-align: left;
 }
+
+h1
+{
+    color: black;
+    margin-left: 11vw;
+}
+
+textarea, #addComment
+{
+    margin-left: 17vw;
+}
 @keyframes fadeIn {
     from {
         opacity: 0;

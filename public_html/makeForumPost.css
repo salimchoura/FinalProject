@@ -15,8 +15,8 @@ body {
 
 h2
 {
-  margin-top: 50px;
-  margin-left: 100px;
+  margin-top: 70px;
+  margin-left: 70px;
 }
 
 h1 {
@@ -162,6 +162,11 @@ nav {
   height: 100px;
   width: 100%;
   justify-content: flex-start; /* Align navigation bar content to the left */
+}
+
+#content
+{
+  margin-top: 0px;
 }
 
 nav a,

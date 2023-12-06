@@ -52,18 +52,13 @@ function editForumPost(){
 
         console.log(result);
 
-        
-
         if (result == 'SUCCESSFULLY UPDATED FORUM POST') {
-
-            document.getElementById('content').innerHTML = `<p id="change">${item.text}</p>`;
-            return false;
+            window.alert('updated post successfully')
         }
         else {
             alert('You need to be logged in to review and comment. Make sure your log in session has not expired');
         }
-
-        window.location = 'forum.html';
+        console.log('x')
 
     }).catch((error) => {
         console.log('THERE WAS AN ERROR ADDING A COMMENT');
