@@ -94,7 +94,7 @@ function editComment(theIdWeNeed) {
     // gets the text and image inputs of the user from the post creation page
     let name = sessionStorage.getItem('username');
     let forum = curr._id;
-    let comment = document.getElementById('newCom').value;
+    let comment = document.getElementById(commID).value;
 
     // body for the post
     newCommentPost = {
@@ -159,5 +159,22 @@ function addListeners() {
     let button = document.getElementById('editPostButton')
     if (button != undefined) {
         button.onclick = editPost
+    }
+}
+
+function addCommentListeners() {
+    let allComms = document.getElementsByClassName('comment');
+    for(let comm of allComms) {
+        let currID = comm.id;
+        let allChildren = comm.children;
+        if(allChildren.length > 2) {
+            let currButton = allChildren[2];
+            let handle = function(e) {
+                return editComment(currID);
+            }
+            if(currButton != undefined) {
+                currButton.addEventListener("click", handle);
+            }
+        }
     }
 }
