@@ -26,10 +26,7 @@ function showComment() {
                     let formatted = JSON.parse(comments);
                     document.getElementById('comments').innerHTML = ''
                     for (let item of formatted) {
-                        let data = decodeURIComponent(document.cookie)
-                        let sliced = data.slice(8, data.length + 1)
-                        let converted = JSON.parse(sliced)
-                        let username = converted['username']
+                        let username = window.sessionStorage.getItem('username');
                         if (confirmation == 1 && username == item['user']) {
                             document.getElementById('comments').innerHTML += `<div class='comment'><h3> ${item.user} </h3><p id="change"> ${item.text} </p> <button id="${item._id}" class="editClass">edit</button> </div><br> <div id="editComment"></div>`;
                         } else {
