@@ -6,9 +6,28 @@ body {
   font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #fce4ec;
+  background-color: white;
+  animation: fadeIn 1s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align content to the left */
+}
+
+h2
+{
+  margin-top: 50px;
+  margin-left: 100px;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 20px; /* Adjusted margin for better centering */
+  font-size: 2em;
+  color: #333;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   animation: fadeIn 1s ease-in-out;
 }
+
 html,
 body {
 margin: 0;
@@ -17,25 +36,45 @@ padding: 0;
 #content{
 margin: 3%;
 }
+
+#advice, #question{
+  margin-left: -16%;
+}
+
 #ad, #qu{
 font-size: 13px;
 }
 
+
+label
+{
+  color: #408a43;
+}
+
 label {
+  margin-left: 100px;
   font-weight: bold;
-  color: #555;
+  text-align: left; /* Align labels to the left */
+}
+
+#image,
+textarea {
+  display: block;
+  margin-top: 10px;
 }
 
 #imagePost, textarea {
   display: block;
   margin-top: 10px;
 }
-#avocado{
-width: 500 px;
-position: fixed;
-margin:0;
-padding-left:850px;
+
+#avocado
+{
+  position: fixed;
+  right: -220px;
+  top: 100px;
 }
+
 #makePost {
 margin-top: 20px;
 padding: 10px 20px;
@@ -48,6 +87,7 @@ position: relative;
 z-index: 10;
 transition: background-color 0.3s;
 }
+
 label, input, textarea {
   display: block;
   margin-top: 10px;
@@ -93,20 +133,37 @@ to {
 }
 }
 
-input, textarea {
+label,
+input,
+textarea {
   display: block;
-  width: 40%;
+  margin-top: 10px;
+  opacity: 0;
+  animation: slideIn 1s forwards;
+  margin-left: 20px; /* Add margin to the left */
+}
+
+input,
+textarea {
+  display: block;
+  width: 60%; /* Adjusted width for better visibility */
   padding: 10px;
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 5px;
   transition: border-color 0.3s;
+  margin-left: 50px;
+  margin-top: 5px; /* Add margin-top for spacing */
 }
+
 nav {
   background-color: #4caf50;
   overflow: hidden;
   height: 100px;
+  width: 100%;
+  justify-content: flex-start; /* Align navigation bar content to the left */
 }
+
 nav a,
 #title {
   margin-top: 30px;
@@ -116,12 +173,15 @@ nav a,
   padding: 14px 16px;
   text-decoration: none;
   transition: background-color 0.3s;
+  text-shadow: none;
   margin-left: 30px;
 }
+
 #title {
   margin-top: 0px;
   font-size: 60px;
 }
-a{
-font-size: 20px;
+
+a {
+  font-size: 20px;
 }

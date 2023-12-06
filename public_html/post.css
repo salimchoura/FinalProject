@@ -3,12 +3,14 @@
 /* Course: CSC 337
 /* Description: Style file for post.html */
 h1{
+    color: #4CAF50;
     padding-top: 3%;
     padding-left:7%;
     text-align: left;
     font-weight: bolder;
     font-size:25px;
 }
+
 .post
 {
     max-width: 800px;
@@ -18,12 +20,18 @@ h1{
     margin: 20px auto;
     color: black;
 }
-.comment {
+
+.comment, #comments {
     max-width: 800px;
     background-color: #fff;
-    padding: 20px;
+    padding: 13px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+#postContent{
+    margin: 5%;
+}
+
 h2{
     padding-left:7%;
     text-align: left;
@@ -35,13 +43,14 @@ textarea{
     text-align: left;
 }
 button{
+    border-radius: 5px;
     background-color: #4CAF50;
     color: #fff;
     border: none;
     padding: 10px;
     cursor: pointer;
     margin-left:7%;
-    font-size: 10px;
+    font-size: 13px;
 }
 #editPostButton
 {

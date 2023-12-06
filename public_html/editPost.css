@@ -9,6 +9,11 @@ body {
   background-color: white;
   animation: fadeIn 1s ease-in-out;
 }
+
+h2{
+  padding-left:3%;
+}
+
 html,
 body {
 margin: 0;
