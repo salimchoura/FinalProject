@@ -47,7 +47,7 @@ function addComment(){
     }).then((response) => {
         return response.text();
     }).then((text) => {
-        if (text == 'SUCCESSFULLY UPDATED COMMENT') {
+        if (text == 'SUCCESSFULLY ADDED COMMENT') {
 
             showComment();
             return false;
@@ -181,11 +181,10 @@ function editPost(){
     }).then((comm) => {
 
         if(comm == 1){
-            document.getElementById('editPostButton').innerHTML += `<div id="editPostButton" ><button id="editPost" onclick="editPost();">Edit Post</button></div>`;
             window.location = 'editPost.html';
             
         }else if(comm == 0){
-            document.getElementById('editPostButton').innerHTML += `<div id="editPostButton" ><h1>Login To Edit Post</h1></div>`;
+            document.getElementById('editPostButton').innerHTML += `<h1>Login To Edit Post</h1><`;
         }
 
     }).catch((error) => {
